@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityHomeMorador">
+
+    <ImageView
+        android:id="@+id/imageViewIconLogo"
+        android:layout_width="90dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
+        app:srcCompat="@drawable/icon_logo_ascija" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutHeader"
+        android:layout_width="426dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/verde_ascija"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageViewHomeIcon"
+        android:layout_width="51dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutHeader"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayoutHeader"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logout_icon" />
+
+    <ImageView
+        android:id="@+id/imageViewLogoTexto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageViewIconLogo"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
+        app:srcCompat="@drawable/texto_logo_ascija" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutEndHeader"
+        android:layout_width="407dp"
+        android:layout_height="6dp"
+        android:background="@color/verde_ascija"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewLogoTexto"
+        app:layout_constraintVertical_bias="0.015" />
+
+    <Button
+        android:id="@+id/buttonReservarQuadra"
+        android:layout_width="295dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/verde_ascija"
+        android:fontFamily="@font/arvo"
+        android:text="Reservar Quadra"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEndHeader" />
+
+    <Button
+        android:id="@+id/buttonMinhasReservas"
+        android:layout_width="291dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/verde_ascija"
+        android:fontFamily="@font/arvo"
+        android:text="Minhas Reservas"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonReservarQuadra" />
+
+    <ImageView
+        android:id="@+id/imageViewReservarQuadrasIcon"
+        android:layout_width="45dp"
+        android:layout_height="36dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonReservarQuadra"
+        app:layout_constraintEnd_toEndOf="@+id/buttonReservarQuadra"
+        app:layout_constraintHorizontal_bias="0.06"
+        app:layout_constraintStart_toStartOf="@+id/buttonReservarQuadra"
+        app:layout_constraintTop_toTopOf="@+id/buttonReservarQuadra"
+        app:srcCompat="@drawable/reservar_quadra_icon" />
+
+    <ImageView
+        android:id="@+id/imageViewMinhasReservasIcon"
+        android:layout_width="36dp"
+        android:layout_height="29dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonMinhasReservas"
+        app:layout_constraintEnd_toEndOf="@+id/buttonMinhasReservas"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="@+id/buttonMinhasReservas"
+        app:layout_constraintTop_toTopOf="@+id/buttonMinhasReservas"
+        app:srcCompat="@drawable/minhas_reservas_icon" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutEndButton"
+        android:layout_width="407dp"
+        android:layout_height="6dp"
+        android:background="@color/verde_ascija"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMinhasReservas"
+        app:layout_constraintVertical_bias="0.08" />
+
+    <TextView
+        android:id="@+id/textViewSuaProximaReserva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/arvo_bold"
+        android:text="Sua próxima reserva:"
+        android:textColor="@color/verde_ascija"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEndButton" />
+
+    <LinearLayout
+        android:id="@+id/caixaStatusReserva"
+        android:layout_width="296dp"
+        android:layout_height="195dp"
+        android:background="@drawable/background_caixa_reserva"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSuaProximaReserva"
+        app:layout_constraintVertical_bias="0.295">
+
+    <LinearLayout
+        android:id="@+id/layoutEstadoVazio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/textViewStatusMensagem"
+            android:layout_width="235dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arvo_bold"
+            android:gravity="center"
+            android:text="Nenhuma reserva encontrada"
+            android:textColor="@color/verde_ascija"
+            android:textSize="25dp" />
+    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutEstadoComReserva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/txtNomeQuadraReserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quadra de Tênis Clássica"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="#FF144229" />
+
+            <TextView
+                android:id="@+id/txtDataHoraReserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12/05/2026 - 19:00"
+                android:layout_marginTop="8dp"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
