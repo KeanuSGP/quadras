@@ -1,4 +1,4 @@
-package com.example.quadras_android
+package com.example.quadras
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

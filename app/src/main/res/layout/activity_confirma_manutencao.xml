@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="#FFFFFF"
+    tools:context=".ActivityConfirmaManutencao">
+
+    <!-- Ícone de Check (Sucesso) -->
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="64dp"
+        android:src="@drawable/check_icon"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Manutenção\nconfirmada!"
+        android:textAlignment="center"
+        android:fontFamily="@font/arvo_bold"
+        android:textColor="#144229"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <!-- Divisor -->
+    <View
+        android:layout_width="350dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/verde_ascija" />
+
+    <!-- Bloco de Informações Dinâmicas -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/txtConfirmacaoQuadra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quadra de tênis 1"
+            android:fontFamily="@font/arvo"
+            android:textColor="#144229"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtInicio"
+            android:fontFamily="@font/arvo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Dia início: 15 de Junho\nHorário início: 8h"
+            android:textAlignment="center"
+            android:textColor="#144229"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/txtTermino"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/arvo"
+            android:text="Dia término: 20 de junho\nHorário término: 16h"
+            android:textAlignment="center"
+            android:textColor="#144229"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Espaçador -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <!-- Divisor -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/verde_ascija"
+        />
+
+    <!-- Botão Home -->
+    <Button
+        android:id="@+id/btnVoltarInicio"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:text="Voltar ao início"
+        android:fontFamily="@font/arvo"
+        android:backgroundTint="#144229"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        android:layout_marginBottom="40dp"
+        />
+
+</LinearLayout>

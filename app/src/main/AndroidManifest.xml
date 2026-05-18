@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Quadras_Android">
         <activity
+            android:name=".ActivityReservas"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityConfirmaCancelamento"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityConfirmaManutencao"
+            android:exported="false" />
+        <activity
             android:name=".ActivitySelecionarQuadra"
             android:exported="false" />
         <activity

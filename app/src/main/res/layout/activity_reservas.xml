@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityReservas"
+    >
+
+    <LinearLayout
+        android:id="@+id/linearLayoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:background="@color/verde_ascija"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageViewHomeIcon"
+        android:layout_width="51dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutHeader"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayoutHeader"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logout_icon" />
+
+
+    <LinearLayout
+        android:id="@+id/wrapperUm"
+        android:layout_width="@+id/main"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+    <LinearLayout
+        android:id="@+id/navWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="70dp"
+            android:layout_height="38dp"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEndHeader"
+            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintHorizontal_bias="0.277"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
+            app:layout_constraintVertical_bias="0.531"
+            app:srcCompat="@drawable/back_page_arrow" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:fontFamily="@font/arvo_bold"
+            android:text="Reservas"
+            android:textColor="@color/verde_ascija"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutEndHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartof="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
+            app:layout_constraintVertical_bias="0.531" />
+
+    </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutEndHeader"
+        android:layout_width="@+id/main"
+        android:layout_height="2dp"
+        android:background="@color/verde_ascija"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/wrapperUm"
+        app:layout_constraintStart_toStartOf="@+id/main"
+        app:layout_constraintEnd_toEndOf="@+id/main"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="0.015" />
+
+    <LinearLayout
+        android:id="@+id/diaAgendadoHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEndHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="20dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:background="@drawable/background_caixa_reserva"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15 de Junho"
+                android:textSize="25dp"
+                android:fontFamily="@font/arvo_bold"
+                android:textColor="@color/verde_ascija"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/calendar_icon"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/reserva1"
+        layout="@layout/item_reserva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/diaAgendadoHeader"
+        />
+
+    <include
+        android:id="@+id/reserva2"
+        layout="@layout/item_reserva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/reserva1"
+        />
+
+    <include
+        android:id="@+id/reserva3"
+        layout="@layout/item_reserva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/reserva2"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

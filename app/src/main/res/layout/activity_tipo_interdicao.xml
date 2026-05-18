@@ -18,6 +18,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <ImageView
+        android:id="@+id/imageViewHomeIcon"
+        android:layout_width="51dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutHeader"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayoutHeader"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logout_icon" />
+
     <LinearLayout
         android:id="@+id/wrapperUm"
         android:layout_width="@+id/root"
@@ -70,7 +79,7 @@
     <LinearLayout
         android:id="@+id/linearLayoutEndHeader"
         android:layout_width="@+id/root"
-        android:layout_height="4dp"
+        android:layout_height="2dp"
         android:background="@color/verde_ascija"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/wrapperUm"
@@ -81,29 +90,34 @@
 
     <LinearLayout
         android:id="@+id/wrapperDois"
-        android:layout_width="@+id/root"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_margin="20dp"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/wrapperUm"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/contorno_motivo_interdicao"
+        android:gravity="center"
         >
+
 
         <LinearLayout
             android:id="@+id/Wrapper"
-            android:layout_width="match_parent"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/contorno_motivo_interdicao"
             android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10px"
+
             >
+
             <TextView
                 android:id="@+id/textViewMotivoInterdicao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/arvo_bold"
-                android:text="Motivo da interdição"
+                android:text="motivo da interdição"
                 android:textColor="@color/verde_ascija"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayoutEndHeader"
@@ -114,7 +128,15 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@color/verde_ascija"
+            android:orientation="horizontal" />
     </LinearLayout>
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonManutencao"
@@ -184,7 +206,7 @@
         <LinearLayout
             android:id="@+id/wrapperTresHeader"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="1dp"
             android:background="@color/verde_ascija"
             android:orientation="horizontal"
             app:layout_constraintTop_toTopOf="@+id/wrapperTres"
