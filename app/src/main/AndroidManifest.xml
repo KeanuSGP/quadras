@@ -26,6 +26,31 @@
         <activity
             android:name=".ActivityHomeMorador"
             android:exported="false" />
+
+        <activity
+            android:name=".Activity_seleciona_espaco"
+            android:exported="false" />
+
+        <activity
+            android:name=".ActivityConfirmaReserva"
+            android:exported="false" />
+
+        <activity
+            android:name=".ActivityHomeAdmin"
+            android:exported="false" />
+
+        <activity
+            android:name=".ActivityLoginAdmin"
+            android:exported="false" />
+
+        <activity
+            android:name=".ActivityTipoInterdicao"
+            android:exported="false" />
+
+        <activity
+            android:name=".agendarHorario"
+            android:exported="false" />
+
         <activity
             android:name=".ActivityLogin"
             android:exported="true">
