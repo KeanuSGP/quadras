@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- adicionando permissao de internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,6 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Quadras_Android">
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
         <activity
             android:name=".ActivityReservas"
             android:exported="false" />
@@ -26,31 +31,24 @@
         <activity
             android:name=".ActivityHomeMorador"
             android:exported="false" />
-
         <activity
             android:name=".Activity_seleciona_espaco"
             android:exported="false" />
-
         <activity
             android:name=".ActivityConfirmaReserva"
             android:exported="false" />
-
         <activity
             android:name=".ActivityHomeAdmin"
             android:exported="false" />
-
         <activity
             android:name=".ActivityLoginAdmin"
             android:exported="false" />
-
         <activity
             android:name=".ActivityTipoInterdicao"
             android:exported="false" />
-
         <activity
             android:name=".agendarHorario"
             android:exported="false" />
-
         <activity
             android:name=".ActivityLogin"
             android:exported="true">

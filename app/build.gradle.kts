@@ -1,16 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "com.example.quadras"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.quadras"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -46,4 +47,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // SDK do Supabase (A versão 2.x.x é a mais estável)
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.5.2")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.5.2")
+
+    // Motor HTTP Ktor (Faz as requisições http do Supabase)
+    implementation("io.ktor:ktor-client-android:2.3.11")
 }
