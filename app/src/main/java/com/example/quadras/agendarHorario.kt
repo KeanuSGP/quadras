@@ -57,7 +57,7 @@ class agendarHorario : AppCompatActivity() {
 
         val quantidadeHorarios = 18
 
-        val horarioAdapter = HorariosAdapter(quantidadeHorarios, this)
+        val horarioAdapter = HorariosAdapter(quantidadeHorarios, this, resumo)
         rvHorario.layoutManager = GridLayoutManager(this, 3)
         rvHorario.adapter = horarioAdapter
 

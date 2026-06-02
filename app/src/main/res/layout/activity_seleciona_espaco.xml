@@ -17,72 +17,98 @@
         android:background="@color/verde_ascija"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="end"
+        >
+
+        <ImageView
+            android:id="@+id/imageViewHomeIcon"
+            android:layout_width="51dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutHeader"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayoutHeader"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logout_icon"
+            android:layout_gravity="center"
+
+            />
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageViewHomeIcon"
-        android:layout_width="51dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutHeader"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayoutHeader"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logout_icon" />
 
     <LinearLayout
-        android:id="@+id/linearLayoutEndHeader"
-        android:layout_width="407dp"
-        android:layout_height="6dp"
-        android:layout_marginBottom="604dp"
-        android:background="@color/verde_ascija"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.015" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/secaoCabecalho"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="88dp"
-        android:fontFamily="@font/arvo_bold"
-        android:text="Selecionar espaço"
-        android:textColor="@color/verde_ascija"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutEndHeader"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
-        app:layout_constraintVertical_bias="0.531" />
-
-    <ImageView
-        android:id="@+id/imageViewBackPage"
-        android:layout_width="70dp"
-        android:layout_height="38dp"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEndHeader"
-        app:layout_constraintEnd_toStartOf="@+id/textView"
-        app:layout_constraintHorizontal_bias="0.277"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
-        app:layout_constraintVertical_bias="0.531"
-        app:srcCompat="@drawable/back_page_arrow" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutHeader"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            >
+            <ImageView
+                android:id="@+id/imageViewBackPage"
+                android:layout_width="70dp"
+                android:layout_height="38dp"
+                app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEndHeader"
+                app:layout_constraintEnd_toStartOf="@+id/textView"
+                app:layout_constraintHorizontal_bias="0.277"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/secaoCabecalho"
+                app:layout_constraintVertical_bias="0.531"
+                app:srcCompat="@drawable/back_page_arrow" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/arvo_bold"
+                android:text="Selecionar espaço"
+                android:textColor="@color/verde_ascija"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayoutEndHeader"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
+                app:layout_constraintVertical_bias="0.531" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/linearLayoutEndHeader"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:background="@color/verde_ascija"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.015" />
+
+
+    </LinearLayout>
+
     <!-- fim cabecalho -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvQuadras"
-        android:layout_width="349dp"
+        android:layout_width="match_parent"
         android:layout_height="532dp"
         android:clipToPadding="false"
-        android:paddingBottom="16dp"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEndHeader"
+        app:layout_constraintTop_toBottomOf="@+id/secaoCabecalho"
         app:layout_constraintVertical_bias="0.373" />
 
 

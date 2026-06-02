@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quadras.QuadrasAdapter.ViewHolder
 
-class HorariosAdapter(private val quantidadeHorario: Int, private val context: Context) :
+class HorariosAdapter(private val quantidadeHorario: Int, private val context: Context, private val resumo: TextView) :
     RecyclerView.Adapter<HorariosAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val horario: TextView
@@ -33,11 +33,31 @@ class HorariosAdapter(private val quantidadeHorario: Int, private val context: C
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(viewHolder: HorariosAdapter.ViewHolder, position: Int) {
+    var horaInicio = 0;
+    var horaFim = 0;
 
+    override fun onBindViewHolder(viewHolder: HorariosAdapter.ViewHolder, position: Int) {
             var hora = 6 + position
             viewHolder.horario.text = "${hora.toString().padStart(2, '0')}:00"
             viewHolder.status.text = "disponivel"
+
+        viewHolder.itemView.setOnClickListener {
+            var horaClique = viewHolder.horario.text.split(":")[0].padStart(2, ' ').toInt()
+
+            if (horaInicio == 0) {
+                horaInicio = horaClique
+                resumo.text = "Horário selecionado: ${horaInicio}:00 - 00:00"
+            }
+
+
+
+
+
+//            if (horaFim == 0 && horaInicio != 0) {
+//                horaFim = horaClique
+//                resumo.text = "Horário selecionado: ${horaInicio} - ${horaFim}"
+//            }
+        }
 
     }
     override fun getItemCount() = quantidadeHorario
