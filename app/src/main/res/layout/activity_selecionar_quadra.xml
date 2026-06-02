@@ -5,102 +5,164 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivitySelecionarQuadra">
+    tools:context=".ActivitySelecionarQuadra"
+    android:fitsSystemWindows="true"
+    >
+
 
     <LinearLayout
-        android:id="@+id/linearLayoutHeader"
-        android:layout_width="426dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="4dp"
-        android:background="@color/verde_ascija"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
+        <LinearLayout
+            android:id="@+id/primeiraMetade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <LinearLayout
+                android:id="@+id/linearLayoutHeader"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="@color/verde_ascija"
+                android:gravity="end"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                >
+
+                <ImageView
+                    android:id="@+id/imageViewHomeIcon"
+                    android:layout_width="51dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/linearLayoutHeader"
+                    app:layout_constraintEnd_toEndOf="@+id/linearLayoutHeader"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/logout_icon"
+
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/segundoLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutHeader">
+
+                <LinearLayout
+                    android:id="@+id/selecionarEspacoLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="0dp"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/back_page_arrow" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:fontFamily="@font/arvo_bold"
+                        android:text="Selecionar espaço"
+                        android:textColor="@color/verde_ascija"
+                        android:textSize="30sp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutEndHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:background="@color/verde_ascija"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/primeiraMetade">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonQuadraTenis"
+                android:layout_width="350dp"
+                android:layout_height="100dp"
+                android:text="Quadra de tênis\nX Disponíveis"
+                android:textSize="25sp"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/tenis_icon"
+                app:iconSize="55sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="50dp"
+                android:backgroundTint="@color/verde_ascija"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonQuadraPoli"
+                android:layout_width="350dp"
+                android:layout_height="100dp"
+                android:text="Quadra poliesportiva\nX Disponíveis"
+                android:textSize="25sp"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/poliesportiva_icon"
+                app:iconSize="55sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonQuadraTenis"
+                android:layout_marginBottom="50dp"
+                android:backgroundTint="@color/verde_ascija"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonCampoFutebol"
+                android:layout_width="350dp"
+                android:layout_height="100dp"
+                android:text="Quadra poliesportiva\nX Disponíveis"
+                android:textSize="25sp"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/futebol_icon"
+                app:iconSize="55sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonQuadraPoli"
+                android:backgroundTint="@color/verde_ascija"
+                />
+
+        </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageViewHomeIcon"
-        android:layout_width="51dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutHeader"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayoutHeader"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logout_icon" />
 
-    <LinearLayout
-        android:id="@+id/linearLayoutEndHeader"
-        android:layout_width="407dp"
-        android:layout_height="6dp"
-        android:layout_marginBottom="604dp"
-        android:background="@color/verde_ascija"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewLogoTexto"
-        app:layout_constraintVertical_bias="0.015"/>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="88dp"
-        android:fontFamily="@font/arvo_bold"
-        android:text="Selecionar espaço"
-        android:textColor="@color/verde_ascija"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutEndHeader"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
-        app:layout_constraintVertical_bias="0.531" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="70dp"
-        android:layout_height="38dp"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEndHeader"
-        app:layout_constraintEnd_toStartOf="@+id/textView"
-        app:layout_constraintHorizontal_bias="0.277"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
-        app:layout_constraintVertical_bias="0.531"
-        app:srcCompat="@drawable/back_page_arrow" />
-
-    <Button
-        android:id="@+id/btQuadraTenis"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/btQuadraPoliesportiva"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEndHeader" />
-
-    <Button
-        android:id="@+id/btQuadraPoliesportiva"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/btCampoDeFutebol"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btCampoDeFutebol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="244dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.389"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

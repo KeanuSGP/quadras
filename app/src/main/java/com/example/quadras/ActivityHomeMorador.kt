@@ -1,6 +1,10 @@
 package com.example.quadras
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,10 +16,17 @@ class ActivityHomeMorador : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home_morador)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        val btnReserva = findViewById<Button>(R.id.buttonReservarQuadra)
+        val btnMinhasReservas = findViewById<Button>(R.id.buttonMinhasReservas)
+        val proxReserva = findViewById<LinearLayout>(R.id.caixaStatusReserva)
+        val user = intent.getStringExtra("user");
+
+        btnReserva.setOnClickListener {
+            Log.d("User: ", user.toString())
+            val intent = Intent(this, ActivitySelecionarQuadra::class.java)
+            intent.putExtra("user", user)
+            startActivity(intent)
         }
     }
 }

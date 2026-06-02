@@ -5,20 +5,23 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".agendarHorario">
+    tools:context=".agendarHorario"
+    android:fitsSystemWindows="true"
+    >
+
 
 <!-- Inicio cabecalho -->
     <LinearLayout
         android:id="@+id/linearLayoutHeader"
-        android:layout_width="426dp"
+        android:layout_width="match_parent"
         android:layout_height="53dp"
-        android:layout_marginTop="4dp"
         android:background="@color/verde_ascija"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
     </LinearLayout>
 
@@ -97,9 +100,11 @@
             android:textStyle="bold" />
 
         <ImageView
+            android:id="@+id/calendario"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/calendar_icon" />
+
     </LinearLayout>
 
     <TextView
@@ -121,10 +126,12 @@
     <!-- GRADE DE HORÁRIOS -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHorarios"
-        android:layout_width="377dp"
+        android:layout_width="0dp"
         android:layout_height="309dp"
         android:layout_weight="1"
         android:padding="8dp"
+        android:alignmentMode="alignBounds"
+        android:rowOrderPreserved="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
@@ -151,7 +158,7 @@
         android:layout_marginTop="28dp"
         android:gravity="center"
         android:padding="8dp"
-        android:text="Horário Selecionado: 10:00 - 12:00"
+        android:text="Horário Selecionado: 00:00 - 00:00"
         android:textStyle="bold"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/btnConfirmar"

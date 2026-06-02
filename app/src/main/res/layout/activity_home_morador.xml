@@ -6,7 +6,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityHomeMorador">
+    tools:context=".ActivityHomeMorador"
+    android:fitsSystemWindows="true"
+    >
 
     <ImageView
         android:id="@+id/imageViewIconLogo"
@@ -20,9 +22,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutHeader"
-        android:layout_width="426dp"
+        android:layout_width="match_parent"
         android:layout_height="53dp"
-        android:layout_marginTop="4dp"
         android:background="@color/verde_ascija"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"

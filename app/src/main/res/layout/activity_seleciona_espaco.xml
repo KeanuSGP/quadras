@@ -5,14 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_seleciona_espaco">
+    tools:context=".Activity_seleciona_espaco"
+    android:fitsSystemWindows="true"
+    >
 
 
     <LinearLayout
         android:id="@+id/linearLayoutHeader"
-        android:layout_width="426dp"
+        android:layout_width="match_parent"
         android:layout_height="53dp"
-        android:layout_marginTop="4dp"
         android:background="@color/verde_ascija"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutEndHeader"
-        app:layout_constraintVertical_bias="0.367" />
+        app:layout_constraintVertical_bias="0.373" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

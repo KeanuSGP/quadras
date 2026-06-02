@@ -54,4 +54,11 @@ dependencies {
 
     // Motor HTTP Ktor (Faz as requisições http do Supabase)
     implementation("io.ktor:ktor-client-android:2.3.11")
+
+    // Material Date Picker para exibição de calendário no clique
+    implementation("com.google.android.material:material:1.11.0")
+
+
+    // Dependência para autenticação bia biometria
+    implementation("androidx.biometric:biometric:1.4.0-alpha02")
 }

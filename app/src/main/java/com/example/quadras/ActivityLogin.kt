@@ -1,12 +1,18 @@
 package com.example.quadras
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
 class ActivityLogin : AppCompatActivity() {
@@ -37,6 +43,9 @@ class ActivityLogin : AppCompatActivity() {
             Log.d("SUPABASE_TESTE", "[UI] Botão clicado. Iniciando processo para: $email")
             Toast.makeText(this, "Autenticando...", Toast.LENGTH_SHORT).show()
 
+            val intent = Intent(this, ActivityHomeMorador::class.java)
+
+
             // Dispara o gatilho dos testes de forma assíncrona
             lifecycleScope.launch {
                 val uid = repository.fazerLogin(email,senha)
@@ -47,6 +56,8 @@ class ActivityLogin : AppCompatActivity() {
 
                     // Roda a sequência de testes passando o UID dinâmico
                     tester.rodarTodosOsTestes(uid)
+                    intent.putExtra("user", uid)
+                    startActivity(intent)
                 } else {
                     Log.e("SUPABASE_TESTE", "[UI] Falha no login. Verifique as credenciais.")
                     Toast.makeText(this@ActivityLogin, "Erro no login! Olhe o Logcat.", Toast.LENGTH_SHORT).show()
