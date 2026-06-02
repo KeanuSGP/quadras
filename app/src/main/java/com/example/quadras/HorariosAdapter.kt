@@ -1,65 +1,162 @@
 package com.example.quadras
 
 import android.content.Context
-import android.content.Intent
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quadras.QuadrasAdapter.ViewHolder
+import com.google.android.material.card.MaterialCardView
 
-class HorariosAdapter(private val quantidadeHorario: Int, private val context: Context, private val resumo: TextView) :
-    RecyclerView.Adapter<HorariosAdapter.ViewHolder>() {
+class HorariosAdapter(
+    private val quantidadeHorarios: Int,
+    private val context: Context,
+    private val txtResumo: TextView
+) : RecyclerView.Adapter<HorariosAdapter.ViewHolder>() {
+
+    // Lista de horários que estão ocupados no banco de dados (guardamos as horas cheias, ex: 14)
+    private val horasOcupadas = mutableSetOf<Int>()
+
+    // Controle de cliques do usuário para montar o intervalo
+    var primeiroClique: Int? = null
+    var segundoClique: Int? = null
+
+    // O condomínio começa a abrir às 06:00 da manhã
+    private val horaInicialFuncionamento = 6
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val horario: TextView
-        val status: TextView
-
-        init {
-            horario = view.findViewById<TextView>(R.id.txtHora)
-            status = view.findViewById<TextView>(R.id.txtStatus)
-        }
+        val card: MaterialCardView = view.findViewById(R.id.cardHorario)
+        val txtHora: TextView = view.findViewById(R.id.txtHora)
+        val txtStatus: TextView = view.findViewById(R.id.txtStatus)
     }
 
-    override fun onCreateViewHolder(
-        viewGroup: ViewGroup,
-        viewType: Int
-    ): HorariosAdapter.ViewHolder {
-
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_horario, viewGroup, false)
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_horario, parent, false)
         return ViewHolder(view)
     }
 
-    var horaInicio = 0;
-    var horaFim = 0;
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val horaDoCard = horaInicialFuncionamento + position
+        holder.txtHora.text = String.format("%02d:00", horaDoCard)
 
-    override fun onBindViewHolder(viewHolder: HorariosAdapter.ViewHolder, position: Int) {
-            var hora = 6 + position
-            viewHolder.horario.text = "${hora.toString().padStart(2, '0')}:00"
-            viewHolder.status.text = "disponivel"
+        // Verifica o estado atual desse card específico
+        val estaOcupadoNoBanco = horasOcupadas.contains(horaDoCard)
+        val estaNoIntervaloSelecionado = estaNoIntervalo(horaDoCard)
 
-        viewHolder.itemView.setOnClickListener {
-            var horaClique = viewHolder.horario.text.split(":")[0].padStart(2, ' ').toInt()
-
-            if (horaInicio == 0) {
-                horaInicio = horaClique
-                resumo.text = "Horário selecionado: ${horaInicio}:00 - 00:00"
+        when {
+            estaOcupadoNoBanco -> {
+                // 🔴 Caso 1: Ocupado por outro morador
+                holder.card.setCardBackgroundColor(Color.parseColor("#B22222")) // Vermelho escuro
+                holder.txtStatus.text = "Ocupado"
+                holder.card.setOnClickListener(null) // Desativa o clique
             }
+            estaNoIntervaloSelecionado -> {
+                // 🟡 Caso 2: Selecionado pelo usuário atual
+                holder.card.setCardBackgroundColor(Color.parseColor("#DAA520")) // Dourado/Amarelo Seleção
+                holder.txtStatus.text = "Selecionado"
+                configurarClique(holder, horaDoCard)
+            }
+            else -> {
+                // 🟢 Caso 3: Disponível
+                holder.card.setCardBackgroundColor(Color.parseColor("#144229")) // Verde ASCIJA padrão
+                holder.txtStatus.text = "Disponível"
+                configurarClique(holder, horaDoCard)
+            }
+        }
+    }
 
+    private fun configurarClique(holder: ViewHolder, hora: Int) {
+        holder.card.setOnClickListener {
+            if (primeiroClique == null) {
+                // Primeiro clique: Define o início
+                primeiroClique = hora
+                txtResumo.text = "Horário Selecionado: ${String.format("%02d:00", hora)} -> Escolha o fim"
+            } else if (segundoClique == null) {
+                // Segundo clique: Valida o intervalo antes de aplicar
+                if (hora > primeiroClique!!) {
+                    // Verifica se o usuário não tentou pular por cima de um horário já ocupado
+                    if (contemOcupadoNoMeio(primeiroClique!!, hora)) {
+                        txtResumo.text = "Não é possível selecionar um intervalo com horários ocupados!"
+                        primeiroClique = null
+                    } else {
+                        segundoClique = hora
+                        txtResumo.text = "Horário Selecionado: ${String.format("%02d:00", primeiroClique)} - ${String.format("%02d:00", segundoClique)}"
+                    }
+                } else {
+                    // Se clicou em uma hora menor, reinicia e transforma ela no novo início
+                    primeiroClique = hora
+                    txtResumo.text = "Horário Selecionado: ${String.format("%02d:00", hora)} -> Escolha o fim"
+                }
+            } else {
+                // Terceiro clique: Reinicia a seleção
+                primeiroClique = hora
+                segundoClique = null
+                txtResumo.text = "Horário Selecionado: ${String.format("%02d:00", hora)} -> Escolha o fim"
+            }
+            notifyDataSetChanged() // Força a grade a se repintar inteira com as novas cores
+        }
+    }
 
+    // Atualiza a lista de bloqueados com base nas respostas reais do Supabase
+    fun atualizarHorariosOcupados(reservas: List<Reserva>) {
+        horasOcupadas.clear()
+        primeiroClique = null
+        segundoClique = null
 
+        // 1. Criamos o formatador calibrado exatamente para o formato: 2026-06-10T14:00:00+00:00
+        val leitorIso = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", java.util.Locale.US)
 
+        // 2. Criamos o calendário baseado no fuso horário do celular do usuário (ex: Brasília)
+        val cal = java.util.Calendar.getInstance(java.util.TimeZone.getDefault())
 
-//            if (horaFim == 0 && horaInicio != 0) {
-//                horaFim = horaClique
-//                resumo.text = "Horário selecionado: ${horaInicio} - ${horaFim}"
-//            }
+        reservas.forEach { reserva ->
+            try {
+                // Transforma o texto do banco em objeto Date do Java
+                val dataInicio = leitorIso.parse(reserva.horaInicio)
+                val dataFim = leitorIso.parse(reserva.horaFim)
+
+                if (dataInicio != null && dataFim != null) {
+                    // Converte e extrai a HORA INICIAL para o fuso local do morador
+                    cal.time = dataInicio
+                    val horaInicioLocal = cal.get(java.util.Calendar.HOUR_OF_DAY)
+
+                    // Converte e extrai a HORA FINAL para o fuso local do morador
+                    cal.time = dataFim
+                    val horaFimLocal = cal.get(java.util.Calendar.HOUR_OF_DAY)
+
+                    Log.d("ADAPTER_FUSO", "Bloqueando das $horaInicioLocal:00 até $horaFimLocal:00 no fuso do dispositivo")
+
+                    // Preenche o Set com os horários que ficarão vermelhos
+                    for (h in horaInicioLocal until horaFimLocal) {
+                        horasOcupadas.add(h)
+                    }
+                }
+            } catch (e: Exception) {
+                // Como o formato está fixado, este catch só rodará em caso de dado corrompido
+                Log.e("ADAPTER_ERRO", "Erro de parse crítico na string: ${reserva.horaInicio}", e)
+            }
         }
 
+        // Força o RecyclerView a se redesenhar aplicando as cores corretas
+        notifyDataSetChanged()
     }
-    override fun getItemCount() = quantidadeHorario
 
+    private fun estaNoIntervalo(hora: Int): Boolean {
+        val p = primeiroClique ?: return false
+        val s = segundoClique
+        if (s == null) return hora == p
+        return hora in p..s
+    }
+
+    private fun contemOcupadoNoMeio(inicio: Int, fim: Int): Boolean {
+        for (h in inicio..fim) {
+            if (horasOcupadas.contains(h)) return true
+        }
+        return false
+    }
+
+    override fun getItemCount() = quantidadeHorarios
 }

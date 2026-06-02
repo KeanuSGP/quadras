@@ -21,7 +21,7 @@ class ActivitySelecionarQuadra : AppCompatActivity() {
         setContentView(R.layout.activity_selecionar_quadra)
 
         val repository = ReservationRepository()
-        val user = intent.getStringExtra("user")
+        val user = intent.getStringExtra("userId")
         Log.d("Usuario em selecioanr Quadra: ", user.toString())
         var btnQuadraTenis = findViewById<MaterialButton>(R.id.buttonQuadraTenis)
         var btnQuadraPoli = findViewById<MaterialButton>(R.id.buttonQuadraPoli)
@@ -43,10 +43,8 @@ class ActivitySelecionarQuadra : AppCompatActivity() {
             Log.d("Quadras em selecioanr quadra: ", quadras.toString())
 
             btnQuadraTenis.text = "Quadra de tênis\n${quadrasTenis.size} Disponíveis"
-            btnQuadraPoli.text = "Quadra de tênis\n${quadrasPoli.size} Disponíveis"
-            btnQuadraFutebol.text = "Quadra de tênis\n${quadrasFutebol.size} Disponíveis"
-
-
+            btnQuadraPoli.text = "Quadra poliesportiva\n${quadrasPoli.size} Disponíveis"
+            btnQuadraFutebol.text = "Quadra de futebol\n${quadrasFutebol.size} Disponíveis"
 
             val intent = Intent(applicationContext, Activity_seleciona_espaco::class.java)
 

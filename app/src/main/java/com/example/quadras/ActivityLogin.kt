@@ -39,28 +39,18 @@ class ActivityLogin : AppCompatActivity() {
                 Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-            Log.d("SUPABASE_TESTE", "[UI] Botão clicado. Iniciando processo para: $email")
-            Toast.makeText(this, "Autenticando...", Toast.LENGTH_SHORT).show()
-
             val intent = Intent(this, ActivityHomeMorador::class.java)
-
 
             // Dispara o gatilho dos testes de forma assíncrona
             lifecycleScope.launch {
                 val uid = repository.fazerLogin(email,senha)
 
                 if(uid != null){
-                    Log.d("SUPABASE_TESTE", "[UI] Autenticado! Iniciando testes de banco...")
-                    Toast.makeText(this@ActivityLogin, "Login OK! Rodando testes no Logcat.", Toast.LENGTH_LONG).show()
-
-                    // Roda a sequência de testes passando o UID dinâmico
-                    tester.rodarTodosOsTestes(uid)
-                    intent.putExtra("user", uid)
+                    intent.putExtra("user_id",uid)
                     startActivity(intent)
+                    finish()
                 } else {
-                    Log.e("SUPABASE_TESTE", "[UI] Falha no login. Verifique as credenciais.")
-                    Toast.makeText(this@ActivityLogin, "Erro no login! Olhe o Logcat.", Toast.LENGTH_SHORT).show()
+                    Log.e("SUPABASE_LOGIN", "[UI] Falha no login. Verifique as credenciais.")
                 }
 
                 }
