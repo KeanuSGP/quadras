@@ -102,15 +102,19 @@ class ReservationRepository {
             val partes = dataFormatada.split("/")
             val dataIsoBase = "${partes[2]}-${partes[1]}-${partes[0]}" // 2026-05-26
 
-            val inicioDia = "${dataIsoBase}T00:00:00Z"
-            val fimDia = "${dataIsoBase}T23:59:59Z"
+            val inicioDia = "${dataIsoBase}T00:00:00"
+            val fimDia = "${dataIsoBase}T23:59:59"
+
+            Log.d("Data: ", inicioDia)
+            Log.d("Data Fim: ", fimDia)
+            Log.d("ID QUADRA: ", idQuadra)
 
             return@withContext SupabaseClient.instance.postgrest["reservas"]
                 .select {
                     filter {
                         eq("id_quadra", idQuadra)
                         gte("hora_inicio", inicioDia)
-                        lte("hora_inicio", fimDia)
+                        lte("hora_fim", fimDia)
                     }
                 }.decodeList<Reserva>()
         } catch (e: Exception) {

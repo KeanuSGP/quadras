@@ -107,10 +107,13 @@ class HorariosAdapter(
         segundoClique = null
 
         // 1. Criamos o formatador calibrado exatamente para o formato: 2026-06-10T14:00:00+00:00
-        val leitorIso = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", java.util.Locale.US)
+        val leitorIso = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", java.util.Locale.US).apply {
+            // FORÇA o leitor a interpretar a data sem converter para o fuso do celular
+            timeZone = java.util.TimeZone.getTimeZone("UTC")
+        }
 
-        // 2. Criamos o calendário baseado no fuso horário do celular do usuário (ex: Brasília)
-        val cal = java.util.Calendar.getInstance(java.util.TimeZone.getDefault())
+        // 2. Criamos o calendário também em UTC para extrair a hora pura vinda do banco
+        val cal = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC"))
 
         reservas.forEach { reserva ->
             try {
@@ -119,24 +122,23 @@ class HorariosAdapter(
                 val dataFim = leitorIso.parse(reserva.horaFim)
 
                 if (dataInicio != null && dataFim != null) {
-                    // Converte e extrai a HORA INICIAL para o fuso local do morador
+                    // Extrai a HORA INICIAL pura do banco
                     cal.time = dataInicio
-                    val horaInicioLocal = cal.get(java.util.Calendar.HOUR_OF_DAY)
+                    val horaInicioBanco = cal.get(java.util.Calendar.HOUR_OF_DAY)
 
-                    // Converte e extrai a HORA FINAL para o fuso local do morador
+                    // Extrai a HORA FINAL pura do banco
                     cal.time = dataFim
-                    val horaFimLocal = cal.get(java.util.Calendar.HOUR_OF_DAY)
+                    val horaFimBanco = cal.get(java.util.Calendar.HOUR_OF_DAY)
 
-                    Log.d("ADAPTER_FUSO", "Bloqueando das $horaInicioLocal:00 até $horaFimLocal:00 no fuso do dispositivo")
+                    Log.d("ADAPTER_SEM_FUSO", "Bloqueando das $horaInicioBanco:00 até $horaFimBanco:00 (Hora direta do banco)")
 
-                    // Preenche o Set com os horários que ficarão vermelhos
-                    for (h in horaInicioLocal until horaFimLocal) {
+                    // Preenche o Set com as horas do intervalo
+                    for (h in horaInicioBanco until horaFimBanco) {
                         horasOcupadas.add(h)
                     }
                 }
             } catch (e: Exception) {
-                // Como o formato está fixado, este catch só rodará em caso de dado corrompido
-                Log.e("ADAPTER_ERRO", "Erro de parse crítico na string: ${reserva.horaInicio}", e)
+                Log.e("ADAPTER_ERRO", "Erro de parse na string: ${reserva.horaInicio}", e)
             }
         }
 

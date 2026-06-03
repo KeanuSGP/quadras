@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -75,6 +78,7 @@ class agendarHorario : AppCompatActivity() {
             formatarData.timeZone = TimeZone.getTimeZone("UTC")
             dataSelecionada = formatarData.format(Date(d))
             txtData.text = dataSelecionada
+
 
             // Sempre que o morador trocar a data, rodamos a busca novamente!
             buscarReservasDoDia(dataSelecionada)
