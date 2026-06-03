@@ -45,6 +45,12 @@ class ActivityHomeMorador : AppCompatActivity() {
             intent.putExtra("userId", userId)
             startActivity(intent)
         }
+
+        btnMinhasReservas.setOnClickListener {
+            val intent = Intent(this, ActivityReservas::class.java)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {

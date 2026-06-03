@@ -30,6 +30,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -61,4 +62,7 @@ dependencies {
 
     // Dependência para autenticação bia biometria
     implementation("androidx.biometric:biometric:1.4.0-alpha02")
+
+    // Dependência para permitir utilização de APIs modernas em versões antigas de API
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

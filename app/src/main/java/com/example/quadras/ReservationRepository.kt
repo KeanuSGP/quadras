@@ -122,4 +122,16 @@ class ReservationRepository {
             emptyList()
         }
     }
+
+    suspend fun deletarReserva(idReserva: String) {
+        try {
+            SupabaseClient.instance.postgrest["reservas"].delete {
+                filter {
+                    eq("id", idReserva)
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("DELETAR RESERVA", "Erro ao tentar deletar reserva: ${e.message}")
+        }
+    }
 }
