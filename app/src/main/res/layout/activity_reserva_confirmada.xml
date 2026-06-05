@@ -9,7 +9,7 @@
     android:gravity="center_horizontal"
     android:padding="32dp"
     android:background="#FFFFFF"
-    tools:context=".ActivityConfirmaReserva"
+    tools:context=".ActivityReservaConfirmada"
     android:fitsSystemWindows="true"
     >
 

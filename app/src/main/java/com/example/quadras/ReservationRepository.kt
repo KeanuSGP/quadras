@@ -42,8 +42,15 @@ class ReservationRepository {
         return@withContext resultado.decodeList<Quadra>()
     }
 
-    suspend fun cadastrarReserva(reserva: Reserva) = withContext(Dispatchers.IO) {
-        postgrest.from("reservas").insert(reserva)
+    suspend fun cadastrarReserva(reserva: Reserva): Boolean = withContext(Dispatchers.IO) {
+        try {
+            postgrest.from("reservas").insert(reserva)
+            true
+
+        } catch (e: Exception) {
+            Log.e("SUPABASE_RESERVA", "Erro ao salvar reserva no banco: ${e.message}", e)
+            false
+        }
     }
 
     suspend fun obterReservasDoUsuario(idUsuario: String): List<Reserva> = withContext(Dispatchers.IO) {

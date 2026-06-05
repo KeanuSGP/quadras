@@ -1,5 +1,6 @@
 package com.example.quadras
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -94,8 +95,25 @@ class agendarHorario : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // TODO: Aqui criaremos o POST final enviando a reserva estruturada ao Supabase!
-            Toast.makeText(this, "Preparado para salvar intervalo das $inc:00 até $fim:00!", Toast.LENGTH_LONG).show()
+            // 1. Monta as datas no formato ISO correto antes de criar o objeto
+            val partesData = dataSelecionada.split("/")
+            val dataBaseIso = "${partesData[2]}-${partesData[1]}-${partesData[0]}"
+            val horaInicioIso = "${dataBaseIso}T${String.format("%02d", inc)}:00:00+00:00"
+            val horaFimIso = "${dataBaseIso}T${String.format("%02d", fim)}:00:00+00:00"
+
+            // 2. Cria o objeto Reserva pré-preenchido
+            val objetoReserva = Reserva(
+                idUsuario = "", // Deixamos vazio, pois a tela de revisão vai injetar o UID real do Supabase
+                idQuadra = idQuadra, // Convertendo Int para String conforme seu modelo
+                horaInicio = horaInicioIso,
+                horaFim = horaFimIso
+            )
+
+            val intent = Intent(this, ActivityConfirmarReserva::class.java)
+            intent.putExtra("objeto_reserva",objetoReserva)
+            intent.putExtra("nome_quadra",quadra.nome)
+            startActivity(intent)
+
         }
     }
 

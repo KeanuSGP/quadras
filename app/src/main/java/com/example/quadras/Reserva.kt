@@ -13,4 +13,4 @@ data class Reserva(
     @SerialName("hora_inicio") val horaInicio: String,
     @SerialName("hora_fim") val horaFim: String,
     @SerialName("cancelada_por") val canceladaPor: String? = null
-)
+):java.io.Serializable

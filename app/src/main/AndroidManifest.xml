@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Quadras_Android">
         <activity
+            android:name=".ActivityConfirmarReserva"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -35,7 +38,7 @@
             android:name=".Activity_seleciona_espaco"
             android:exported="false" />
         <activity
-            android:name=".ActivityConfirmaReserva"
+            android:name=".ActivityReservaConfirmada"
             android:exported="false" />
         <activity
             android:name=".ActivityHomeAdmin"
