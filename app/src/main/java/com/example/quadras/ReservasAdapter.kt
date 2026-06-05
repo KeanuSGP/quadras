@@ -19,7 +19,7 @@ import java.time.format.TextStyle
 import java.util.Date
 import java.util.Locale
 
-class ReservasAdapter(private var reservas: List<Reserva>, private var quadras: List<Quadra>, private val userId: String, private val lifecycleScope: LifecycleCoroutineScope)
+class ReservasAdapter(private var reservas: List<Reserva>, private var quadras: List<Quadra>, private val userId: String, private val lifecycleScope: LifecycleCoroutineScope, private val diaAtual: String, private val horaFormatada: String)
     : RecyclerView.Adapter<ReservasAdapter.ViewHolder>() {
 
         private val repository = ReservationRepository()
@@ -33,7 +33,6 @@ class ReservasAdapter(private var reservas: List<Reserva>, private var quadras: 
                 nome = itemReserva.findViewById<TextView>(R.id.txtQuadra)
                 data = itemReserva.findViewById<TextView>(R.id.txtData)
                 cancelar = itemReserva.findViewById<Button>(R.id.btnCancelar)
-                Log.d("ADAPTER", "Criado adapter ${this.hashCode()}")
             }
         }
 
@@ -74,11 +73,7 @@ class ReservasAdapter(private var reservas: List<Reserva>, private var quadras: 
         lifecycleScope.launch {
             try {
                 repository.deletarReserva(reserva.id.toString())
-                val reservasAposDelecao = repository.obterReservasDoUsuario(userId)
-                Log.d(
-                    "DELETE",
-                    "Tamanho = ${reservasAposDelecao.size}"
-                )
+                val reservasAposDelecao = repository.obterReservasDoUsuario(userId, "${diaAtual}T${horaFormatada}")
                 atualizarDado(reservasAposDelecao, quadras)
             } catch(e: Exception) {
                     Log.d("ERRO AO DELETAR", e.message.toString())
@@ -94,12 +89,9 @@ class ReservasAdapter(private var reservas: List<Reserva>, private var quadras: 
 
         // propriedade usada para avisar ao adapter que as propridades foram setadas, forçando a renderização novamente
         notifyDataSetChanged()
-
-        Log.d("ADAPTER", "Atualizando adapter ${this.hashCode()}")
     }
 
         override fun getItemCount():Int {
-            Log.d("ADAPTER", "ItemCount = ${reservas.size}")
             return reservas.size
         }
 

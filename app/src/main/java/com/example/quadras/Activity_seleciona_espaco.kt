@@ -21,13 +21,14 @@ class Activity_seleciona_espaco : AppCompatActivity() {
         val quadras = intent.getSerializableExtra("quadras") as List<Quadra>
         Log.d("Quadras em seleção do espaço: ", quadras.toString())
         val voltar = findViewById<ImageView>(R.id.imageViewBackPage)
+        val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
 
         voltar.setOnClickListener {
             finish()
         }
 
 
-        val quadrasAdapter = QuadrasAdapter(quadras, this)
+        val quadrasAdapter = QuadrasAdapter(quadras, this, ehAdmin)
 
         val rvQuadras = findViewById<RecyclerView>(R.id.rvQuadras)
         rvQuadras.layoutManager = LinearLayoutManager(this)

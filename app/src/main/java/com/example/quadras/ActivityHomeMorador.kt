@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -29,9 +30,14 @@ class ActivityHomeMorador : AppCompatActivity() {
         setContentView(R.layout.activity_home_morador)
 
         val btnReserva = findViewById<Button>(R.id.buttonReservarQuadra)
+        val btnReservaIcon = findViewById<ImageView>(R.id.imageViewReservarQuadrasIcon)
         val btnMinhasReservas = findViewById<Button>(R.id.buttonMinhasReservas)
+        val txtSuaProximaReserva = findViewById<TextView>(R.id.textViewSuaProximaReserva)
 
         val userId = intent.getStringExtra("user_id")
+        val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
+
+        Log.d("EH ADMIN VALOR APOS CRIACAO DE MANUTENCAO", ehAdmin.toString())
 
         if (userId.isNullOrEmpty()) {
             Toast.makeText(this,"Erro ao recuperar dados do usuario.", Toast.LENGTH_SHORT).show()
@@ -39,16 +45,26 @@ class ActivityHomeMorador : AppCompatActivity() {
             return
         }
 
+        if (ehAdmin) {
+            btnReserva.text = "Interditar Quadra"
+            btnReservaIcon.setImageResource(R.drawable.interditar_quadra_icon)
+            btnMinhasReservas.text = "Reservas"
+            txtSuaProximaReserva.text = "Próxima\nManutenção"
+            txtSuaProximaReserva.gravity = 17
+        }
+
         btnReserva.setOnClickListener {
             Log.d("User: ", userId)
             val intent = Intent(this, ActivitySelecionarQuadra::class.java)
             intent.putExtra("userId", userId)
+            intent.putExtra("ehAdmin", ehAdmin)
             startActivity(intent)
         }
 
         btnMinhasReservas.setOnClickListener {
             val intent = Intent(this, ActivityReservas::class.java)
             intent.putExtra("userId", userId)
+            intent.putExtra("ehAdmin", ehAdmin)
             startActivity(intent)
         }
     }

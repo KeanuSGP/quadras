@@ -22,6 +22,7 @@ class ActivitySelecionarQuadra : AppCompatActivity() {
 
         val repository = ReservationRepository()
         val user = intent.getStringExtra("userId")
+        val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
         Log.d("Usuario em selecioanr Quadra: ", user.toString())
         var btnQuadraTenis = findViewById<MaterialButton>(R.id.buttonQuadraTenis)
         var btnQuadraPoli = findViewById<MaterialButton>(R.id.buttonQuadraPoli)
@@ -50,14 +51,17 @@ class ActivitySelecionarQuadra : AppCompatActivity() {
 
             btnQuadraTenis.setOnClickListener {
                 intent.putExtra("quadras", ArrayList(quadrasTenis))
+                intent.putExtra("ehAdmin", ehAdmin)
                 startActivity(intent)
             }
             btnQuadraPoli.setOnClickListener {
                 intent.putExtra("quadras", ArrayList(quadrasPoli))
+                intent.putExtra("ehAdmin", ehAdmin)
                 startActivity(intent)
             }
             btnQuadraFutebol.setOnClickListener {
                 intent.putExtra("quadras", ArrayList(quadrasFutebol))
+                intent.putExtra("ehAdmin", ehAdmin)
                 startActivity(intent)
             }
 

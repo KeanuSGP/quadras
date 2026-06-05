@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="verde_ascija">#FF0F401F</color>
+    <color name="selecionado">#00A937</color>
 </resources>

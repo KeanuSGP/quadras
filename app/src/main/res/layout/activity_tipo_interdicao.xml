@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/root"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    >
 
     <LinearLayout
         android:id="@+id/linearLayoutHeader"
-        android:layout_width="426dp"
+        android:layout_width="match_parent"
         android:layout_height="53dp"
-        android:layout_marginTop="4dp"
         android:background="@color/verde_ascija"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -220,13 +221,12 @@
             android:id="@+id/ButtonConfirmar"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:text="Confirmar"
             android:layout_marginTop="20dp"
+            android:background="@drawable/background_motivo_interdicao_button"
+            android:text="Confirmar"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:background="@drawable/background_motivo_interdicao_button"
-            android:textSize="25sp"
-            />
+            android:textSize="25sp" />
 
     </LinearLayout>
 

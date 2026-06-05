@@ -8,7 +8,9 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="#FFFFFF"
-    tools:context=".ActivityConfirmaManutencao">
+    tools:context=".ActivityConfirmaManutencao"
+    android:fitsSystemWindows="true"
+    >
 
     <!-- Ícone de Check (Sucesso) -->
     <ImageView
@@ -56,16 +58,15 @@
 
         <TextView
             android:id="@+id/txtInicio"
-            android:fontFamily="@font/arvo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:fontFamily="@font/arvo"
             android:text="Dia início: 15 de Junho\nHorário início: 8h"
             android:textAlignment="center"
             android:textColor="#144229"
             android:textSize="23sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtTermino"

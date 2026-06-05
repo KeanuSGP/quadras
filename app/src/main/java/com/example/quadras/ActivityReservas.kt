@@ -1,6 +1,5 @@
 package com.example.quadras
 
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,13 +7,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -41,15 +41,23 @@ class ActivityReservas : AppCompatActivity() {
         var reservas: List<Reserva> = emptyList()
         var quadras: List<Quadra> = emptyList()
 
+        val horaAtual = Clock.System.now()
+        val horaAtualDoSistema = horaAtual.toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault())
+        val horaAtualSplit = horaAtualDoSistema.toString().split("T")
+        val horaFormatada = horaAtualSplit[1].split(".")[0]
+        val diaAtual = horaAtualSplit[0]
+        Log.d("HORA ATUAL DO SISTEMA:", horaFormatada)
+        Log.d("DIA ATUAL DO SISTEMA:", diaAtual)
 
-        val adapter = ReservasAdapter(reservas, quadras, userId, lifecycleScope )
+
+        val adapter = ReservasAdapter(reservas, quadras, userId, lifecycleScope, diaAtual, horaFormatada )
         rvReservas.layoutManager = LinearLayoutManager(this@ActivityReservas)
         rvReservas.adapter = adapter
         Log.d("RESERVAS: ", reservas.toString())
 
         // requisita reservas e quadras e monta o recycler view
         lifecycleScope.launch {
-            reservas = repository.obterReservasDoUsuario(userId)
+            reservas = repository.obterReservasDoUsuario(userId, "${diaAtual}T${horaFormatada}")
             quadras = repository.obterQuadras()
 
             if (reservas.isEmpty()) {

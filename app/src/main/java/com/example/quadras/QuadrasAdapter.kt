@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class QuadrasAdapter(private val dataSet: List<Quadra>, private val context: Context) : RecyclerView.Adapter<QuadrasAdapter.ViewHolder>() {
+class QuadrasAdapter(private val dataSet: List<Quadra>, private val context: Context, private val ehAdmin: Boolean) : RecyclerView.Adapter<QuadrasAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imagem : ImageView
         val nomeQuadra : TextView
@@ -48,6 +48,7 @@ class QuadrasAdapter(private val dataSet: List<Quadra>, private val context: Con
         viewHolder.itemView.setOnClickListener {
             val intent = Intent(context, agendarHorario::class.java)
             intent.putExtra("quadra", quadra)
+            intent.putExtra("ehAdmin", ehAdmin)
             context.startActivity(intent)
         }
 

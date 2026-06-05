@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.ui.text)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
@@ -63,6 +64,8 @@ dependencies {
     // Dependência para autenticação bia biometria
     implementation("androidx.biometric:biometric:1.4.0-alpha02")
 
-    // Dependência para permitir utilização de APIs modernas em versões antigas de API
+    // Dependência para permitir utilização de bibliotecas modernas em versões antigas de API
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
 }

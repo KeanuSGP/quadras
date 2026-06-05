@@ -45,8 +45,11 @@ class ActivityLogin : AppCompatActivity() {
             lifecycleScope.launch {
                 val uid = repository.fazerLogin(email,senha)
 
+
                 if(uid != null){
+                    val ehAdmin = repository.ehAdmin(uid)
                     intent.putExtra("user_id",uid)
+                    intent.putExtra("ehAdmin", ehAdmin)
                     startActivity(intent)
                     finish()
                 } else {

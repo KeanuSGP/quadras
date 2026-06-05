@@ -85,6 +85,9 @@ class agendarHorario : AppCompatActivity() {
             buscarReservasDoDia(dataSelecionada)
         }
 
+        // vê se o usuário logado é admin
+        val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
+
         // Ação do Botão Confirmar
         btnConfirmar.setOnClickListener {
             val inc = horarioAdapter.primeiroClique
@@ -109,10 +112,19 @@ class agendarHorario : AppCompatActivity() {
                 horaFim = horaFimIso
             )
 
-            val intent = Intent(this, ActivityConfirmarReserva::class.java)
-            intent.putExtra("objeto_reserva",objetoReserva)
-            intent.putExtra("nome_quadra",quadra.nome)
-            startActivity(intent)
+            if (ehAdmin) {
+                val intent = Intent(this, ActivityTipoInterdicao::class.java)
+                intent.putExtra("objeto_reserva",objetoReserva)
+                intent.putExtra("nome_quadra",quadra.nome)
+                intent.putExtra("ehAdmin", ehAdmin)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, ActivityConfirmarReserva::class.java)
+                intent.putExtra("objeto_reserva",objetoReserva)
+                intent.putExtra("nome_quadra",quadra.nome)
+                startActivity(intent)
+            }
+
 
         }
     }

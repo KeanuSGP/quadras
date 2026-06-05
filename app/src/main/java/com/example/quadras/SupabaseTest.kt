@@ -50,7 +50,7 @@ class SupabaseTest {
         try {
             Log.d("SUPABASE_TESTE", "[GET WHERE] Buscando reservas do usuário: $uidLogado")
 
-            val listaReservas = repository.obterReservasDoUsuario(uidLogado)
+            val listaReservas = repository.obterReservasDoUsuario(uidLogado, "")
             Log.d("SUPABASE_TESTE", "[GET WHERE] Sucesso! Reservas encontradas: ${listaReservas.size}")
             listaReservas.forEach { reserva ->
                 Log.d("SUPABASE_TESTE", "   -> Reserva ID: ${reserva.id} | Quadra: ${reserva.idQuadra} | Início: ${reserva.horaInicio}")

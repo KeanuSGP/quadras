@@ -7,6 +7,9 @@ import kotlinx.coroutines.withContext
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.query.Order
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import java.time.Instant
 
 class ReservationRepository {
@@ -53,11 +56,12 @@ class ReservationRepository {
         }
     }
 
-    suspend fun obterReservasDoUsuario(idUsuario: String): List<Reserva> = withContext(Dispatchers.IO) {
+    suspend fun obterReservasDoUsuario(idUsuario: String, horaAtual: String): List<Reserva> = withContext(Dispatchers.IO) {
         val resultado = postgrest.from("reservas")
             .select {
                 filter {
                     eq("id_usuario", idUsuario)
+                    gte("hora_inicio", horaAtual)
                 }
             }
         return@withContext resultado.decodeList<Reserva>()
@@ -139,6 +143,20 @@ class ReservationRepository {
             }
         } catch (e: Exception) {
             Log.d("DELETAR RESERVA", "Erro ao tentar deletar reserva: ${e.message}")
+        }
+    }
+
+    suspend fun ehAdmin(idUsuario: String): Boolean {
+        try {
+            val usuario = SupabaseClient.instance.postgrest["usuarios"].select {
+                filter {
+                    eq("id", idUsuario)
+                }
+            }.decodeSingle<Usuario>()
+            return usuario.admin
+        } catch (e: Exception) {
+            Log.d("Erro verificação de admin", e.message.toString())
+            return false
         }
     }
 }
