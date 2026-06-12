@@ -139,8 +139,8 @@
     <!-- GRADE DE HORÁRIOS -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHorarios"
-        android:layout_width="411dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
         android:layout_weight="1"
         android:alignmentMode="alignBounds"
         android:padding="8dp"
@@ -179,7 +179,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="8dp"
             android:text="Horário Selecionado: 00:00 - 00:00"
             android:textSize="20dp"
             android:textStyle="bold"

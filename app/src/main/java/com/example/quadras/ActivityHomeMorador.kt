@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,6 +34,7 @@ class ActivityHomeMorador : AppCompatActivity() {
         val btnReservaIcon = findViewById<ImageView>(R.id.imageViewReservarQuadrasIcon)
         val btnMinhasReservas = findViewById<Button>(R.id.buttonMinhasReservas)
         val txtSuaProximaReserva = findViewById<TextView>(R.id.textViewSuaProximaReserva)
+        val logoff = findViewById<ImageView>(R.id.imageViewHomeIcon)
 
         val userId = intent.getStringExtra("user_id")
         val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
@@ -67,6 +69,10 @@ class ActivityHomeMorador : AppCompatActivity() {
             intent.putExtra("ehAdmin", ehAdmin)
             startActivity(intent)
         }
+
+        logoff.setOnClickListener {
+            logoff()
+        }
     }
 
     override fun onResume() {
@@ -74,7 +80,6 @@ class ActivityHomeMorador : AppCompatActivity() {
         val userId = intent.getStringExtra("user_id")
 
         if(!userId.isNullOrEmpty()) {
-
             val layoutVazio = findViewById<LinearLayout>(R.id.layoutEstadoVazio)
             val layoutComReserva = findViewById<LinearLayout>(R.id.layoutEstadoComReserva)
             val txtNomeQuadra = findViewById<TextView>(R.id.txtNomeQuadraReserva)
@@ -89,6 +94,26 @@ class ActivityHomeMorador : AppCompatActivity() {
             )
         }
 
+    }
+
+    private fun logoff() {
+        val intent = Intent(this, ActivityLogin::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle("Atenção")
+        builder.setMessage("Tem certeza que quer deslogar do sistema?")
+
+        builder.setPositiveButton("Sim") { dialog, which ->
+            startActivity(intent)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, which ->
+        }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
     //funcao assincrona para carregar painel dinamicamente
@@ -153,9 +178,7 @@ class ActivityHomeMorador : AppCompatActivity() {
     }
     private fun extrairHora(dataIso: String): String {
         return try {
-            val leitorIso = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.US).apply {
-                timeZone = java.util.TimeZone.getTimeZone("UTC")
-            }
+            val leitorIso = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.US)
             val dataObjeto = leitorIso.parse(dataIso)
             val formatadorHora = java.text.SimpleDateFormat("HH:mm", java.util.Locale("pt", "BR")).apply {
                 timeZone = java.util.TimeZone.getDefault()

@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -28,10 +29,13 @@ class ActivitySelecionarQuadra : AppCompatActivity() {
         var btnQuadraPoli = findViewById<MaterialButton>(R.id.buttonQuadraPoli)
         var btnQuadraFutebol = findViewById<MaterialButton>(R.id.buttonCampoFutebol)
         val voltar = findViewById<ImageView>(R.id.imageView)
+        val logoff = findViewById<ImageView>(R.id.imageViewHomeIcon)
 
         voltar.setOnClickListener {
             finish()
         }
+
+        logoff.setOnClickListener { logoff() }
 
 
         lifecycleScope.launch {
@@ -67,5 +71,24 @@ class ActivitySelecionarQuadra : AppCompatActivity() {
 
         }
 
+    }
+    private fun logoff() {
+        val intent = Intent(this, ActivityLogin::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle("Atenção")
+        builder.setMessage("Tem certeza que quer deslogar do sistema?")
+
+        builder.setPositiveButton("Sim") { dialog, which ->
+            startActivity(intent)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, which ->
+        }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 }

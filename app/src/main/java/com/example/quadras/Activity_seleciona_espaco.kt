@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -22,6 +23,9 @@ class Activity_seleciona_espaco : AppCompatActivity() {
         Log.d("Quadras em seleção do espaço: ", quadras.toString())
         val voltar = findViewById<ImageView>(R.id.imageViewBackPage)
         val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
+        val logoff = findViewById<ImageView>(R.id.imageViewHomeIcon)
+
+        logoff.setOnClickListener { logoff() }
 
         voltar.setOnClickListener {
             finish()
@@ -37,5 +41,24 @@ class Activity_seleciona_espaco : AppCompatActivity() {
 
 
 
+    }
+    private fun logoff() {
+        val intent = Intent(this, ActivityLogin::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle("Atenção")
+        builder.setMessage("Tem certeza que quer deslogar do sistema?")
+
+        builder.setPositiveButton("Sim") { dialog, which ->
+            startActivity(intent)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, which ->
+        }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 }

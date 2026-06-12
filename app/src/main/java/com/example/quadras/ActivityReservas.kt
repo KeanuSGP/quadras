@@ -1,11 +1,13 @@
 package com.example.quadras
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +30,7 @@ class ActivityReservas : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_reservas)
 
+        val logoff = findViewById<ImageView>(R.id.imageViewHomeIcon)
         val repository = ReservationRepository()
         val timeZoneUTC = TimeZone.getTimeZone("UTC")
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -36,10 +39,12 @@ class ActivityReservas : AppCompatActivity() {
         val txtData = findViewById<TextView>(R.id.txtData)
         val voltar = findViewById<ImageView>(R.id.imageView)
         val userId = intent.getStringExtra("userId").toString()
+        val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
         val rvReservas = findViewById<RecyclerView>(R.id.rvReservas)
         val txtNenhumaReservaEncontrada = findViewById<TextView>(R.id.txtNenhumaReserva)
         var reservas: List<Reserva> = emptyList()
         var quadras: List<Quadra> = emptyList()
+
 
         val horaAtual = Clock.System.now()
         val horaAtualDoSistema = horaAtual.toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault())
@@ -70,6 +75,7 @@ class ActivityReservas : AppCompatActivity() {
 
         }
 
+        logoff.setOnClickListener { logoff() }
 
         // finaliza activity atual e volta para a anterior
         voltar.setOnClickListener {
@@ -113,5 +119,24 @@ class ActivityReservas : AppCompatActivity() {
 
 
 
+    }
+    private fun logoff() {
+        val intent = Intent(this, ActivityLogin::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle("Atenção")
+        builder.setMessage("Tem certeza que quer deslogar do sistema?")
+
+        builder.setPositiveButton("Sim") { dialog, which ->
+            startActivity(intent)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, which ->
+        }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 }

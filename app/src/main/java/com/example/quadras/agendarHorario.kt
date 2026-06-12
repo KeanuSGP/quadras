@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -53,6 +54,10 @@ class agendarHorario : AppCompatActivity() {
         val calendario = findViewById<ImageView>(R.id.calendario)
         val txtData = findViewById<TextView>(R.id.txtDataSelecionada)
 
+        val logoff = findViewById<ImageView>(R.id.imageViewHomeIcon)
+
+        logoff.setOnClickListener { logoff() }
+
         // Configuração inicial da data
         var dataSelecionada = formatarData.format(Date())
         txtData.text = dataSelecionada
@@ -60,7 +65,9 @@ class agendarHorario : AppCompatActivity() {
         // Inicializa o Adapter
         val quantidadeHorarios = 18
         horarioAdapter = HorariosAdapter(quantidadeHorarios, this, resumo)
-        rvHorario.layoutManager = GridLayoutManager(this, 3)
+        rvHorario.layoutManager = object : GridLayoutManager(this, 3) {
+            override fun canScrollVertically(): Boolean = false
+        }
         rvHorario.adapter = horarioAdapter
 
         // Busca inicial de reservas para o dia de hoje
@@ -137,5 +144,24 @@ class agendarHorario : AppCompatActivity() {
             // Alimenta o adapter com as reservas reais vindas do banco
             horarioAdapter.atualizarHorariosOcupados(reservasOcupadas)
         }
+    }
+    private fun logoff() {
+        val intent = Intent(this, ActivityLogin::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle("Atenção")
+        builder.setMessage("Tem certeza que quer deslogar do sistema?")
+
+        builder.setPositiveButton("Sim") { dialog, which ->
+            startActivity(intent)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, which ->
+        }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 }

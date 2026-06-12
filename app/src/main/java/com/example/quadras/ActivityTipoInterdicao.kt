@@ -100,43 +100,47 @@ class ActivityTipoInterdicao : AppCompatActivity() {
         }
 
         btnConfirmar.setOnClickListener {
-            lifecycleScope.launch {
-                val userId = SupabaseClient.instance.auth.currentUserOrNull()?.id
-                if (userId == null) {
-                    Toast.makeText(
-                        this@ActivityTipoInterdicao,
-                        "Sessão expirada!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@launch
-                }
-                val reserva = reservaProvisoria?.copy(idUsuario = userId, status = "indisponivel")
-                if (reserva != null) {
-                    Toast.makeText(
-                        this@ActivityTipoInterdicao,
-                        "Agendando manutenção...",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    val sucesso = repository.cadastrarReserva(reserva)
-                    if (sucesso) {
-                        val intent = Intent(
+            if (!btnManutencao.isSelected || !btnEvento.isSelected || !btnOutro.isSelected) {
+                Toast.makeText(this, "Selecione um motivo!", Toast.LENGTH_SHORT).show()
+            } else {
+                lifecycleScope.launch {
+                    val userId = SupabaseClient.instance.auth.currentUserOrNull()?.id
+                    if (userId == null) {
+                        Toast.makeText(
                             this@ActivityTipoInterdicao,
-                            ActivityConfirmaManutencao::class.java
-                        )
-                        intent.putExtra("reserva", reserva)
-                        intent.putExtra("quadra", nomeQuadra)
-                        intent.putExtra("userId", userId)
-                        intent.putExtra("ehAdmin", ehAdmin)
-                        Log.d("NOME DA QUADRA ENVIADO PARA CONFIMACAO DE MANUTENCAO", nomeQuadra)
-                        startActivity(intent)
-                        finish()
+                            "Sessão expirada!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@launch
                     }
-                } else {
-                    Toast.makeText(
-                        this@ActivityTipoInterdicao,
-                        "Falha ao agendar manutenção.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val reserva = reservaProvisoria?.copy(idUsuario = userId, status = "indisponivel")
+                    if (reserva != null) {
+                        Toast.makeText(
+                            this@ActivityTipoInterdicao,
+                            "Agendando manutenção...",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        val sucesso = repository.cadastrarReserva(reserva)
+                        if (sucesso) {
+                            val intent = Intent(
+                                this@ActivityTipoInterdicao,
+                                ActivityConfirmaManutencao::class.java
+                            )
+                            intent.putExtra("reserva", reserva)
+                            intent.putExtra("quadra", nomeQuadra)
+                            intent.putExtra("userId", userId)
+                            intent.putExtra("ehAdmin", ehAdmin)
+                            Log.d("NOME DA QUADRA ENVIADO PARA CONFIMACAO DE MANUTENCAO", nomeQuadra)
+                            startActivity(intent)
+                            finish()
+                        }
+                    } else {
+                        Toast.makeText(
+                            this@ActivityTipoInterdicao,
+                            "Falha ao agendar manutenção.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }

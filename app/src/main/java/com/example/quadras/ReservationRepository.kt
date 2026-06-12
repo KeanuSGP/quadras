@@ -70,10 +70,10 @@ class ReservationRepository {
     suspend fun obterProximaReserva(idUsuario: String) : Reserva? = withContext(Dispatchers.IO) {
         try {
             // Captura a data atual compatível com qualquer versão do Android (API 24+)
-            val formatador = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US).apply {
-                timeZone = java.util.TimeZone.getTimeZone("UTC")
-            }
+            val formatador = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US)
             val dataAtual = formatador.format(java.util.Date())
+
+            Log.d("DATA ATUAL NO REPO", dataAtual)
 
             val proximaReserva = SupabaseClient.instance.postgrest["reservas"]
                 .select {
@@ -84,6 +84,7 @@ class ReservationRepository {
                     order(column = "hora_inicio", order = Order.ASCENDING)
                     limit(count = 1)
                 }.decodeList<Reserva>()
+            Log.d("PROXIMA RESERVA NO REPO", proximaReserva.toString())
             return@withContext proximaReserva.firstOrNull()
         } catch (e: Exception) {
             Log.e("SUPABASE_HOME", "ERRO AO BUSCAR PROXIMA RESERVA: ${e.message}",e)
