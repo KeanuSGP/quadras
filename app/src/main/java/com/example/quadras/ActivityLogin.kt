@@ -14,7 +14,9 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ActivityLogin : AppCompatActivity() {
 
@@ -45,7 +47,7 @@ class ActivityLogin : AppCompatActivity() {
             val intent = Intent(this, ActivityHomeMorador::class.java)
 
             // Dispara o gatilho dos testes de forma assíncrona
-            lifecycleScope.launch {
+            lifecycleScope.launch{
                 val uid = repository.fazerLogin(email,senha)
 
 
@@ -56,6 +58,7 @@ class ActivityLogin : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 } else {
+                    Toast.makeText(this@ActivityLogin, "Falha no login. Verifique as credenciais.", Toast.LENGTH_SHORT).show()
                     Log.e("SUPABASE_LOGIN", "[UI] Falha no login. Verifique as credenciais.")
                 }
 

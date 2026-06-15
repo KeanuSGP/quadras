@@ -100,7 +100,7 @@ class ActivityTipoInterdicao : AppCompatActivity() {
         }
 
         btnConfirmar.setOnClickListener {
-            if (!btnManutencao.isSelected || !btnEvento.isSelected || !btnOutro.isSelected) {
+            if (!btnManutencao.isSelected && !btnEvento.isSelected && !btnOutro.isSelected) {
                 Toast.makeText(this, "Selecione um motivo!", Toast.LENGTH_SHORT).show()
             } else {
                 lifecycleScope.launch {

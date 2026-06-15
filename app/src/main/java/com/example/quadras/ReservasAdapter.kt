@@ -1,5 +1,6 @@
 package com.example.quadras
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
@@ -19,25 +21,34 @@ import java.time.format.TextStyle
 import java.util.Date
 import java.util.Locale
 
-class ReservasAdapter(private var reservas: List<Reserva>, private var quadras: List<Quadra>, private val userId: String, private val lifecycleScope: LifecycleCoroutineScope, private val diaAtual: String, private val horaFormatada: String)
-    : RecyclerView.Adapter<ReservasAdapter.ViewHolder>() {
+class ReservasAdapter(
+    private var reservas: List<Reserva>,
+    private var quadras: List<Quadra>,
+    private val userId: String,
+    private val lifecycleScope: LifecycleCoroutineScope,
+    private val diaAtual: String,
+    private val horaFormatada: String,
+    private val avisoReserva: TextView? = null,
+    private val context: Context? = null
+) : RecyclerView.Adapter<ReservasAdapter.ViewHolder>() {
 
-        private val repository = ReservationRepository()
+    private val repository = ReservationRepository()
 
-        class ViewHolder(itemReserva: View): RecyclerView.ViewHolder(itemReserva) {
-            val nome: TextView
-            val data: TextView
-            val cancelar: Button
+    class ViewHolder(itemReserva: View) : RecyclerView.ViewHolder(itemReserva) {
+        val nome: TextView
+        val data: TextView
+        val cancelar: Button
 
-            init {
-                nome = itemReserva.findViewById<TextView>(R.id.txtQuadra)
-                data = itemReserva.findViewById<TextView>(R.id.txtData)
-                cancelar = itemReserva.findViewById<Button>(R.id.btnCancelar)
-            }
+        init {
+            nome = itemReserva.findViewById<TextView>(R.id.txtQuadra)
+            data = itemReserva.findViewById<TextView>(R.id.txtData)
+            cancelar = itemReserva.findViewById<Button>(R.id.btnCancelar)
         }
+    }
 
     override fun onCreateViewHolder(rvReservas: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(rvReservas.context).inflate(R.layout.item_reserva, rvReservas, false)
+        val view = LayoutInflater.from(rvReservas.context)
+            .inflate(R.layout.item_reserva, rvReservas, false)
         return ViewHolder(view)
     }
 
@@ -49,7 +60,7 @@ class ReservasAdapter(private var reservas: List<Reserva>, private var quadras: 
         val dia = data.toString().split('-')[2]
         // pega o mês e converte para o nome dele em enum e em inglês
         val mes = Month.of(data.toString().split('-')[1].toInt())
-        val quadra = quadras.find{ it.id == reserva.idQuadra }
+        val quadra = quadras.find { it.id == reserva.idQuadra }
 
         // getDisplayName ta formantando para string. FULL indica que vai exibir o nome completo do mês e
         // locale está setando o idioma para o brasileiro
@@ -66,20 +77,30 @@ class ReservasAdapter(private var reservas: List<Reserva>, private var quadras: 
             deletarReserva(reserva)
         }
 
-        }
+    }
 
 
     fun deletarReserva(reserva: Reserva) {
-        lifecycleScope.launch {
-            try {
-                repository.deletarReserva(reserva.id.toString())
-                val reservasAposDelecao = repository.obterReservasDoUsuario(userId, "${diaAtual}T${horaFormatada}")
-                atualizarDado(reservasAposDelecao, quadras)
-            } catch(e: Exception) {
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(context!!)
+        dialog.setMessage("Tem certeza que deseja deletar a reserva?")
+        dialog.setPositiveButton("Sim") { dialog, id ->
+            lifecycleScope.launch {
+                try {
+                    repository.deletarReserva(reserva.id.toString())
+                    val reservasAposDelecao =
+                        repository.obterReservasDoUsuario(userId, "${diaAtual}T${horaFormatada}")
+                    atualizarDado(reservasAposDelecao, quadras)
+                    Toast.makeText(context, "Reserva deletada com sucesso!", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    Toast.makeText(context, "Erro ao tentar deletar a reserva.", Toast.LENGTH_SHORT)
+                        .show()
                     Log.d("ERRO AO DELETAR", e.message.toString())
+                }
             }
+        }.setNegativeButton("Não") { dialog, id ->
 
         }
+        dialog.create().show()
     }
 
     fun atualizarDado(reservas: List<Reserva>, quadras: List<Quadra>) {
@@ -87,12 +108,17 @@ class ReservasAdapter(private var reservas: List<Reserva>, private var quadras: 
         this.reservas = reservas
         this.quadras = quadras
 
+        if (reservas.isEmpty()) {
+            avisoReserva?.visibility = View.VISIBLE
+        }
+
         // propriedade usada para avisar ao adapter que as propridades foram setadas, forçando a renderização novamente
         notifyDataSetChanged()
     }
 
-        override fun getItemCount():Int {
-            return reservas.size
-        }
+
+    override fun getItemCount(): Int {
+        return reservas.size
+    }
 
 }

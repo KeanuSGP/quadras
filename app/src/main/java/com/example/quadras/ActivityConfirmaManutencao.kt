@@ -38,7 +38,7 @@ class ActivityConfirmaManutencao : AppCompatActivity() {
         @Suppress("DEPRECATION")
         val mesNome = dataParse.month.getDisplayName(TextStyle.FULL, java.util.Locale("pt", "BR"))
 
-        txtInicio.text = "Dia início: ${dataInicio.toString().split("-")[2]} de ${mesNome}\nHorário início: ${horaInicio}h"
+        txtInicio.text = "Dia início: ${dataInicio.split("-")[2]} de ${mesNome}\nHorário início: ${horaInicio}h"
         txtTermino.text = "Dia término: ${dataFim[0].split("-")[2]} de ${mesNome}\nHorário término: ${horaFim}h"
 
         btnVoltarInicio.setOnClickListener {
