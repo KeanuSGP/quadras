@@ -135,6 +135,37 @@ class ReservationRepository {
         }
     }
 
+    suspend fun deletarReservasQuadraNoPeriodo(idQuadra: String, inicio: String, fim: String) {
+        try {
+            Log.d("ID QUADRA", idQuadra)
+            Log.d("INICIO RECEBIDO", inicio)
+            Log.d("FIM RECEBIDO", fim)
+
+            val teste = SupabaseClient.instance.postgrest["reservas"]
+                .select {
+                    filter {
+                        eq("id_quadra", idQuadra)
+                        gte("hora_inicio", inicio)
+                        lte("hora_fim", fim)
+                    }
+                }
+                .decodeList<Reserva>()
+
+            Log.d("TESTE_DELETE", "Encontrou ${teste.size} reservas")
+
+            SupabaseClient.instance.postgrest["reservas"].delete {
+                    filter {
+                        eq("id_quadra", idQuadra)
+                        lt("hora_inicio", fim)
+                        gt("hora_fim", inicio)
+                    }
+                }
+
+        } catch(e: Exception ) {
+            Log.d("ERRO AO DELETAR RESERVAS", "${e.message}")
+        }
+    }
+
     suspend fun deletarReserva(idReserva: String) {
         try {
             SupabaseClient.instance.postgrest["reservas"].delete {

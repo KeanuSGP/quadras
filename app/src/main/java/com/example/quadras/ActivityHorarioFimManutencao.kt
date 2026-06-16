@@ -12,9 +12,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.OffsetDateTime
 import java.util.Date
@@ -24,11 +26,14 @@ import java.util.TimeZone
 class ActivityHorarioFimManutencao : AppCompatActivity() {
 
     private lateinit var horarioAdapter: HorariosAdapter
+    private val repository = ReservationRepository()
+    private var idQuadra: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_horario_fim_manutencao)
+
 
         val voltar = findViewById<ImageView>(R.id.imageViewBackPage)
         val logoff = findViewById<ImageView>(R.id.imageViewHomeIcon)
@@ -46,6 +51,7 @@ class ActivityHorarioFimManutencao : AppCompatActivity() {
         val reservaPrePreenchida = intent.getSerializableExtra("objeto_reserva") as Reserva
         val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
         val nomeQuadra = intent.getStringExtra("nome_quadra")
+        idQuadra = reservaPrePreenchida.idQuadra
 
         // sai da tela caso o usuário não seja admin
         if (!ehAdmin) {
@@ -53,6 +59,11 @@ class ActivityHorarioFimManutencao : AppCompatActivity() {
             startActivity(Intent(this, ActivityLogin::class.java))
             finish()
         }
+
+        // pega data e hora de inicio da reserva
+        val hInc = reservaPrePreenchida.horaInicio.split("T")[1].split("+")[0].split(":")[0]
+        val dInc = reservaPrePreenchida.horaInicio.split("T")[0]
+        val dIncformatada = "(${dInc.split("-")[2]}/${dInc.split("-")[1]})"
 
         // Inicializa o Adapter
         val quantidadeHorarios = 18
@@ -63,9 +74,6 @@ class ActivityHorarioFimManutencao : AppCompatActivity() {
         rv.adapter = horarioAdapter
 
         // passa a data de início para o adapter (será usado na seleção de data de fim)
-        val hInc = reservaPrePreenchida.horaInicio.split("T")[1].split("+")[0].split(":")[0]
-        val dInc = reservaPrePreenchida.horaInicio.split("T")[0]
-        val dIncformatada = "(${dInc.split("-")[2]}/${dInc.split("-")[1]})"
         horarioAdapter.horaInicioManutencao = hInc.toInt()
         horarioAdapter.dataInicioManutencao = dIncformatada
 
@@ -82,6 +90,11 @@ class ActivityHorarioFimManutencao : AppCompatActivity() {
         // configuração para exibição de data
         val formatarData = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         var dataSelecionada = formatarData.format(Date())
+        txtData.text = dataSelecionada
+        val formatDtSelecionada = "(${dataSelecionada.split("/")[0]}/${dataSelecionada.split("/")[1]})"
+        horarioAdapter.dataFimManutencao = formatDtSelecionada
+
+        buscarReservasDoDia(dataSelecionada)
 
         datePicker.addOnPositiveButtonClickListener { d ->
             formatarData.timeZone = TimeZone.getTimeZone("UTC")
@@ -94,10 +107,17 @@ class ActivityHorarioFimManutencao : AppCompatActivity() {
             horarioAdapter.atualizarResumo()
             txtData.text = dataSelecionada
 
+            Log.d("TESTE", "primeiroClique antes = ${horarioAdapter.primeiroClique}")
 
-            // verificar
-            // Sempre que o morador trocar a data, rodamos a busca novamente!
-//            buscarReservasDoDia(dataSelecionada)
+            horarioAdapter.primeiroClique = null
+            Log.d("TESTE", "primeiroClique depois = ${horarioAdapter.primeiroClique}")
+
+            horarioAdapter.atualizarResumo()
+
+            horarioAdapter.notifyDataSetChanged()
+
+            buscarReservasDoDia(dataSelecionada)
+
         }
 
         Log.d("RESERVA PRE PREENCHIDO", reservaPrePreenchida.toString())
@@ -118,6 +138,8 @@ class ActivityHorarioFimManutencao : AppCompatActivity() {
 
             Log.d("RESERVA PARA ENVIAR", objetoReserva.toString())
 
+
+            // VERIFICAR MESMO DIA MAS HORARIO DE FIM MENOR QUE INICIO
             // comparação entre a data inicio e fim da reserva
             val dataInicio = OffsetDateTime.parse(objetoReserva.horaInicio).toLocalDate()
             val dataFim = OffsetDateTime.parse(objetoReserva.horaFim).toLocalDate()
@@ -133,6 +155,18 @@ class ActivityHorarioFimManutencao : AppCompatActivity() {
             }
 
         }
+
+    }
+
+    fun buscarReservasDoDia(data: String) {
+        lifecycleScope.launch {
+            val reservasOcupadas =
+                repository.obterReservasQuardaNoDia(idQuadra, data)
+
+            horarioAdapter.atualizarHorariosOcupados(
+                reservasOcupadas
+            )
+        }
     }
 
     private fun logoff() {
@@ -142,7 +176,7 @@ class ActivityHorarioFimManutencao : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
 
         builder.setTitle("Atenção")
-        builder.setMessage("Tem certeza que quer deslogar do sistema?")
+        builder.setMessage("Tem certeza que quer sair do sistema?")
 
         builder.setPositiveButton("Sim") { dialog, which ->
             startActivity(intent)

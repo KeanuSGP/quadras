@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
@@ -17,14 +18,19 @@ import androidx.lifecycle.lifecycleScope
 import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
 import androidx.core.graphics.toColorInt
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ActivityTipoInterdicao : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_tipo_interdicao)
 
         val repository = ReservationRepository()
+
+        @Suppress("DEPRECATION")
         val reservaProvisoria = intent.getSerializableExtra("objeto_reserva") as? Reserva
         val nomeQuadra = intent.getStringExtra("nome_quadra") ?: "Quadra"
         val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
@@ -103,45 +109,61 @@ class ActivityTipoInterdicao : AppCompatActivity() {
             if (!btnManutencao.isSelected && !btnEvento.isSelected && !btnOutro.isSelected) {
                 Toast.makeText(this, "Selecione um motivo!", Toast.LENGTH_SHORT).show()
             } else {
-                lifecycleScope.launch {
-                    val userId = SupabaseClient.instance.auth.currentUserOrNull()?.id
-                    if (userId == null) {
-                        Toast.makeText(
-                            this@ActivityTipoInterdicao,
-                            "Sessão expirada!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@launch
-                    }
-                    val reserva = reservaProvisoria?.copy(idUsuario = userId, status = "indisponivel")
-                    if (reserva != null) {
-                        Toast.makeText(
-                            this@ActivityTipoInterdicao,
-                            "Agendando manutenção...",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        val sucesso = repository.cadastrarReserva(reserva)
-                        if (sucesso) {
-                            val intent = Intent(
-                                this@ActivityTipoInterdicao,
-                                ActivityConfirmaManutencao::class.java
-                            )
-                            intent.putExtra("reserva", reserva)
-                            intent.putExtra("quadra", nomeQuadra)
-                            intent.putExtra("userId", userId)
-                            intent.putExtra("ehAdmin", ehAdmin)
-                            Log.d("NOME DA QUADRA ENVIADO PARA CONFIMACAO DE MANUTENCAO", nomeQuadra)
-                            startActivity(intent)
-                            finish()
+                val confirmacao = android.app.AlertDialog.Builder(this)
+                confirmacao.setMessage("Tem certeza que deseja agendar a manutenção? Todas as reservas nesse período serão canceladas.")
+                    .setPositiveButton("Sim") { dialog, id ->
+                        lifecycleScope.launch {
+                            val userId = SupabaseClient.instance.auth.currentUserOrNull()?.id
+                            if (userId == null) {
+                                Toast.makeText(
+                                    this@ActivityTipoInterdicao,
+                                    "Sessão expirada!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return@launch
+                            }
+                            val reserva =
+                                reservaProvisoria?.copy(idUsuario = userId, status = "indisponivel")
+                            if (reserva != null) {
+                                Toast.makeText(
+                                    this@ActivityTipoInterdicao,
+                                    "Agendando manutenção...",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("INICIO_REAL", reserva.horaInicio)
+                                Log.d("FIM_REAL", reserva.horaFim)
+                                    repository.deletarReservasQuadraNoPeriodo(
+                                        reserva.idQuadra,
+                                        reserva.horaInicio,
+                                        reserva.horaFim
+                                    )
+
+                                val sucesso = repository.cadastrarReserva(reserva)
+                                if (sucesso) {
+                                    val intent = Intent(
+                                        this@ActivityTipoInterdicao,
+                                        ActivityConfirmaManutencao::class.java
+                                    )
+                                    intent.putExtra("reserva", reserva)
+                                    intent.putExtra("quadra", nomeQuadra)
+                                    intent.putExtra("userId", userId)
+                                    intent.putExtra("ehAdmin", ehAdmin)
+                                    Log.d(
+                                        "NOME DA QUADRA ENVIADO PARA CONFIMACAO DE MANUTENCAO",
+                                        nomeQuadra
+                                    )
+                                    startActivity(intent)
+                                    finish()
+                                }
+                            } else {
+                                Toast.makeText(
+                                    this@ActivityTipoInterdicao,
+                                    "Falha ao agendar manutenção.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-                    } else {
-                        Toast.makeText(
-                            this@ActivityTipoInterdicao,
-                            "Falha ao agendar manutenção.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                    }.setNegativeButton("Não") { dialog, id -> }.create().show()
             }
         }
     }

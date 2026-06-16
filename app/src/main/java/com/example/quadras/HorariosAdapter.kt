@@ -31,6 +31,8 @@ class HorariosAdapter(
     var dataFimManutencao: String? = null
     var horaInicioManutencao: Int? = null
 
+    var dataExibida: String? = null
+
     // O condomínio começa a abrir às 06:00 da manhã
     private val horaInicialFuncionamento = 6
 
@@ -54,12 +56,6 @@ class HorariosAdapter(
         val estaNoIntervaloSelecionado = estaNoIntervalo(horaDoCard)
 
         when {
-            estaOcupadoNoBanco -> {
-                // 🔴 Caso 1: Ocupado por outro morador
-                holder.card.setCardBackgroundColor(Color.parseColor("#B22222")) // Vermelho escuro
-                holder.txtStatus.text = "Ocupado"
-                holder.card.setOnClickListener(null) // Desativa o clique
-            }
             estaNoIntervaloSelecionado -> {
                 // 🟡 Caso 2: Selecionado pelo usuário atual
                 holder.card.setCardBackgroundColor(Color.parseColor("#DAA520")) // Dourado/Amarelo Seleção
@@ -68,6 +64,16 @@ class HorariosAdapter(
                     configurarCliqueAdmin(holder, horaDoCard)
                 } else {
                     configurarClique(holder, horaDoCard)
+                }
+            }
+            estaOcupadoNoBanco -> {
+                // 🔴 Caso 1: Ocupado por outro morador
+                holder.card.setCardBackgroundColor(Color.parseColor("#B22222")) // Vermelho escuro
+                holder.txtStatus.text = "Ocupado"
+                if (adminUser) {
+                    configurarCliqueAdmin(holder, horaDoCard)
+                } else {
+                    holder.card.setOnClickListener(null) // Desativa o clique
                 }
             }
             else -> {
@@ -85,13 +91,32 @@ class HorariosAdapter(
     }
 
     fun atualizarResumo() {
+        val horaFimTexto = primeiroClique?.let {
+            String.format("%02d:00", it)
+        } ?: "--:--"
+
         txtResumo.text =
-            "Horário selecionado: $dataInicioManutencao ${String.format("%02d:00", horaInicioManutencao)} - " +
-                    "${dataFimManutencao ?: "__/__"} ${String.format("%02d:00", primeiroClique ?: 0)}"
+            "Horário selecionado: $dataInicioManutencao " +
+                    "${String.format("%02d:00", horaInicioManutencao)} - " +
+                    "${dataFimManutencao ?: "(__/__)"} $horaFimTexto"
     }
 
     private fun configurarCliqueAdmin(holder: ViewHolder, hora: Int) {
         holder.card.setOnClickListener {
+            if (
+                momento == "fim" &&
+                dataInicioManutencao == dataFimManutencao &&
+                hora == horaInicioManutencao
+            ) {
+                // Remove qualquer seleção de horário final
+                primeiroClique = null
+                segundoClique = null
+
+                atualizarResumo()
+                notifyDataSetChanged()
+                return@setOnClickListener
+            }
+
             primeiroClique = hora
             segundoClique = null
 
@@ -101,15 +126,13 @@ class HorariosAdapter(
             }
             if (momento == "fim") {
                 txtResumo.text =
-                    "Horário Selecionado: ${dataInicioManutencao} ${
+                    "Horário selecionado: ${dataInicioManutencao} ${
                         String.format(
                             "%02d:00",
                             horaInicioManutencao
                         )
                     } - ${if(dataFimManutencao != null) dataFimManutencao else "(__/__)"} ${String.format("%02d:00", hora)}"
             }
-
-
             notifyDataSetChanged()
         }
     }
@@ -119,32 +142,37 @@ class HorariosAdapter(
             if (primeiroClique == null) {
                 // Primeiro clique: Define o início
                 primeiroClique = hora
-                txtResumo.text = "Horário Selecionado: ${String.format("%02d:00", hora)} -> Escolha o fim"
+                txtResumo.text = "Horário selecionado: ${String.format("%02d:00", hora)} -> Escolha o fim"
             } else if (segundoClique == null) {
                 // Segundo clique: Valida o intervalo antes de aplicar
-                if (hora > primeiroClique!!) {
-                    // Verifica se o usuário não tentou pular por cima de um horário já ocupado
-                    if (contemOcupadoNoMeio(primeiroClique!!, hora)) {
-                        txtResumo.text = "Não é possível selecionar um intervalo com horários ocupados!"
-                        primeiroClique = null
-                    } else {
-                        segundoClique = hora
-                        txtResumo.text = "Horário Selecionado: ${String.format("%02d:00", primeiroClique)} - ${String.format("%02d:00", segundoClique)}"
-                    }
+                if (hora == primeiroClique!! + 1) {
+                    segundoClique = hora
+                    txtResumo.text =
+                        "Horário Selecionado: ${String.format("%02d:00", primeiroClique)} - ${String.format("%02d:00", segundoClique)}"
                 } else {
-                    // Se clicou em uma hora menor, reinicia e transforma ela no novo início
+                    Toast.makeText(
+                        context,
+                        "Reservas podem ter no máximo 1 hora de duração.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    // Reinicia a seleção usando o horário clicado como novo início
                     primeiroClique = hora
-                    txtResumo.text = "Horário Selecionado: ${String.format("%02d:00", hora)} -> Escolha o fim"
+                    segundoClique = null
+                    txtResumo.text =
+                        "Horário Selecionado: ${String.format("%02d:00", hora)} -> Escolha o fim"
                 }
             } else {
                 // Terceiro clique: Reinicia a seleção
                 primeiroClique = hora
                 segundoClique = null
-                txtResumo.text = "Horário Selecionado: ${String.format("%02d:00", hora)} -> Escolha o fim"
+                txtResumo.text = "Horário selecionado: ${String.format("%02d:00", hora)} -> Escolha o fim"
             }
             notifyDataSetChanged() // Força a grade a se repintar inteira com as novas cores
         }
     }
+
+
 
     // Atualiza a lista de bloqueados com base nas respostas reais do Supabase
     fun atualizarHorariosOcupados(reservas: List<Reserva>) {
@@ -193,6 +221,22 @@ class HorariosAdapter(
     }
 
     private fun estaNoIntervalo(hora: Int): Boolean {
+        if (adminUser && momento == "fim") {
+
+            if (dataInicioManutencao == dataFimManutencao) {
+
+                // Ainda não escolheu o horário final:
+                if (primeiroClique == null) {
+                    return hora == horaInicioManutencao
+                }
+
+                // Já escolheu o horário final:
+                return hora in horaInicioManutencao!!..primeiroClique!!
+            }
+
+            // Dias diferentes: pinta apenas o horário final
+            return hora == primeiroClique
+        }
         val p = primeiroClique ?: return false
         val s = segundoClique
         if (s == null) return hora == p
