@@ -30,7 +30,7 @@
                 app:layout_constraintStart_toStartOf="@+id/espacoHeader"
                 app:layout_constraintEnd_toEndOf="@+id/espacoHeader"
                 app:layout_constraintTop_toTopOf="parent"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textColor="@color/verde_ascija"
                 />
 
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:text="15 de Junho\n10h - 12h"
                 android:textColor="@color/verde_ascija"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 />
 
             <View
@@ -71,11 +71,11 @@
 
             <Button
                 android:id="@+id/btnCancelar"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#144229"
                 android:text="Cancelar"
-                android:textSize="17sp"
+                android:textSize="13sp"
                 app:cornerRadius="10dp"
                 />
 

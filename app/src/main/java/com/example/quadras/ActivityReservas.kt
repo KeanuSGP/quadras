@@ -55,7 +55,7 @@ class ActivityReservas : AppCompatActivity() {
         Log.d("DIA ATUAL DO SISTEMA:", diaAtual)
 
 
-        val adapter = ReservasAdapter(reservas, quadras, userId, lifecycleScope, diaAtual, horaFormatada, txtNenhumaReservaEncontrada, this@ActivityReservas )
+        val adapter = ReservasAdapter(reservas, quadras, userId, lifecycleScope, diaAtual, horaFormatada, txtNenhumaReservaEncontrada, this@ActivityReservas, ehAdmin )
         rvReservas.layoutManager = LinearLayoutManager(this@ActivityReservas)
         rvReservas.adapter = adapter
         Log.d("RESERVAS: ", reservas.toString())

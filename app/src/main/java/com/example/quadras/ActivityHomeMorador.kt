@@ -23,6 +23,7 @@ import java.util.Locale
 
 class ActivityHomeMorador : AppCompatActivity() {
 
+    private var ehAdmin: Boolean = false
     private val repository = ReservationRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,12 +38,12 @@ class ActivityHomeMorador : AppCompatActivity() {
         val logoff = findViewById<ImageView>(R.id.imageViewHomeIcon)
 
         val userId = intent.getStringExtra("user_id")
-        val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
+        ehAdmin = intent.getBooleanExtra("ehAdmin", false)
 
         Log.d("EH ADMIN VALOR APOS CRIACAO DE MANUTENCAO", ehAdmin.toString())
 
         if (userId.isNullOrEmpty()) {
-            Toast.makeText(this,"Erro ao recuperar dados do usuario.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Erro ao recuperar dados do usuario.", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -79,7 +80,7 @@ class ActivityHomeMorador : AppCompatActivity() {
         super.onResume()
         val userId = intent.getStringExtra("user_id")
 
-        if(!userId.isNullOrEmpty()) {
+        if (!userId.isNullOrEmpty()) {
             val layoutVazio = findViewById<LinearLayout>(R.id.layoutEstadoVazio)
             val layoutComReserva = findViewById<LinearLayout>(R.id.layoutEstadoComReserva)
             val txtNomeQuadra = findViewById<TextView>(R.id.txtNomeQuadraReserva)
@@ -127,7 +128,7 @@ class ActivityHomeMorador : AppCompatActivity() {
         lifecycleScope.launch {
             val proximaReserva = repository.obterProximaReserva(userId)
 
-            if(proximaReserva != null){
+            if (proximaReserva != null) {
 
                 //busca dados da quadra
                 val quadra = repository.obterQuadra(proximaReserva.idQuadra)
@@ -137,23 +138,35 @@ class ActivityHomeMorador : AppCompatActivity() {
                 layoutComReserva.visibility = View.VISIBLE
 
                 //caso encontrou quadra exibir com nome real
-                if(quadra != null){
+                if (quadra != null) {
                     txtNomeQuadra.text = quadra.nome
-                } else{
+                } else {
                     txtNomeQuadra.text = "Quadra selecionada (ID: ${proximaReserva.idQuadra})"
                 }
 
                 //formatar data
                 val dataReserva = extrairData(proximaReserva.horaInicio)
+                val fimReserva = extrairData(proximaReserva.horaFim)
                 val horaInicioFormatada = extrairHora(proximaReserva.horaInicio)
                 val horaFimFormatada = extrairHora(proximaReserva.horaFim)
-                txtDataHora.text = """
+
+                if (ehAdmin) {
+                    txtDataHora.text = """
+                    - dia: $dataReserva
+                    - fim: $fimReserva
+                    - inicio: $horaInicioFormatada
+                    - fim: $horaFimFormatada
+                """.trimIndent()
+                } else {
+                    txtDataHora.text = """
                     - dia: $dataReserva
                     - inicio: $horaInicioFormatada
                     - fim: $horaFimFormatada
                 """.trimIndent()
+                }
 
-            } else{
+
+            } else {
                 //nenhuma reserva encontrada
                 layoutVazio.visibility = View.VISIBLE
                 layoutComReserva.visibility = View.GONE
@@ -164,25 +177,29 @@ class ActivityHomeMorador : AppCompatActivity() {
     //TODO: passar funcoes helpers para uma classe / arquivo especifico
     private fun extrairData(dataIso: String): String {
         return try {
-            val leitorIso = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.US).apply {
-                timeZone = java.util.TimeZone.getTimeZone("UTC")
-            }
+            val leitorIso =
+                java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.US).apply {
+                    timeZone = java.util.TimeZone.getTimeZone("UTC")
+                }
             val dataObjeto = leitorIso.parse(dataIso)
-            val formatadorData = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale("pt", "BR")).apply {
-                timeZone = java.util.TimeZone.getDefault()
-            }
+            val formatadorData =
+                java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale("pt", "BR")).apply {
+                    timeZone = java.util.TimeZone.getDefault()
+                }
             if (dataObjeto != null) formatadorData.format(dataObjeto) else dataIso
         } catch (e: Exception) {
             dataIso
         }
     }
+
     private fun extrairHora(dataIso: String): String {
         return try {
             val leitorIso = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.US)
             val dataObjeto = leitorIso.parse(dataIso)
-            val formatadorHora = java.text.SimpleDateFormat("HH:mm", java.util.Locale("pt", "BR")).apply {
-                timeZone = java.util.TimeZone.getDefault()
-            }
+            val formatadorHora =
+                java.text.SimpleDateFormat("HH:mm", java.util.Locale("pt", "BR")).apply {
+                    timeZone = java.util.TimeZone.getDefault()
+                }
             if (dataObjeto != null) formatadorHora.format(dataObjeto) else "--:--"
         } catch (e: Exception) {
             "--:--"

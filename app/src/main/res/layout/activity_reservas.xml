@@ -69,7 +69,7 @@
             android:fontFamily="@font/arvo_bold"
             android:text="Reservas"
             android:textColor="@color/verde_ascija"
-            android:textSize="35sp"
+            android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayoutEndHeader"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -116,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="15 de Junho"
-                android:textSize="25dp"
+                android:textSize="20dp"
                 android:fontFamily="@font/arvo_bold"
                 android:textColor="@color/verde_ascija"
                 />
@@ -128,7 +128,7 @@
 
             <ImageView
                 android:id="@+id/filtrarReservas"
-                android:layout_width="40dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/calendar_icon"
                 />

@@ -46,7 +46,7 @@ class QuadrasAdapter(private val dataSet: List<Quadra>, private val context: Con
         }
 
         viewHolder.itemView.setOnClickListener {
-            val intent = Intent(context, agendarHorario::class.java)
+            val intent = Intent(context, ActivityAgendarHorario::class.java)
             intent.putExtra("quadra", quadra)
             intent.putExtra("ehAdmin", ehAdmin)
             context.startActivity(intent)

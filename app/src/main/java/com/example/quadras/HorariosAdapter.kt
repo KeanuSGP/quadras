@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
@@ -14,7 +15,9 @@ import com.google.android.material.card.MaterialCardView
 class HorariosAdapter(
     private val quantidadeHorarios: Int,
     private val context: Context,
-    private val txtResumo: TextView
+    private val txtResumo: TextView,
+    private val adminUser: Boolean = false,
+    private val momento: String? = null
 ) : RecyclerView.Adapter<HorariosAdapter.ViewHolder>() {
 
     // Lista de horários que estão ocupados no banco de dados (guardamos as horas cheias, ex: 14)
@@ -23,6 +26,10 @@ class HorariosAdapter(
     // Controle de cliques do usuário para montar o intervalo
     var primeiroClique: Int? = null
     var segundoClique: Int? = null
+
+    var dataInicioManutencao: String? = null
+    var dataFimManutencao: String? = null
+    var horaInicioManutencao: Int? = null
 
     // O condomínio começa a abrir às 06:00 da manhã
     private val horaInicialFuncionamento = 6
@@ -57,14 +64,53 @@ class HorariosAdapter(
                 // 🟡 Caso 2: Selecionado pelo usuário atual
                 holder.card.setCardBackgroundColor(Color.parseColor("#DAA520")) // Dourado/Amarelo Seleção
                 holder.txtStatus.text = "Selecionado"
-                configurarClique(holder, horaDoCard)
+                if (adminUser) {
+                    configurarCliqueAdmin(holder, horaDoCard)
+                } else {
+                    configurarClique(holder, horaDoCard)
+                }
             }
             else -> {
                 // 🟢 Caso 3: Disponível
                 holder.card.setCardBackgroundColor(Color.parseColor("#144229")) // Verde ASCIJA padrão
                 holder.txtStatus.text = "Disponível"
-                configurarClique(holder, horaDoCard)
+                if (adminUser) {
+                    configurarCliqueAdmin(holder, horaDoCard)
+                } else {
+                    configurarClique(holder, horaDoCard)
+
+                }
             }
+        }
+    }
+
+    fun atualizarResumo() {
+        txtResumo.text =
+            "Horário selecionado: $dataInicioManutencao ${String.format("%02d:00", horaInicioManutencao)} - " +
+                    "${dataFimManutencao ?: "__/__"} ${String.format("%02d:00", primeiroClique ?: 0)}"
+    }
+
+    private fun configurarCliqueAdmin(holder: ViewHolder, hora: Int) {
+        holder.card.setOnClickListener {
+            primeiroClique = hora
+            segundoClique = null
+
+            if (momento == "inicio") {
+                txtResumo.text =
+                    "Horário de início: ${String.format("%02d:00", hora)}"
+            }
+            if (momento == "fim") {
+                txtResumo.text =
+                    "Horário Selecionado: ${dataInicioManutencao} ${
+                        String.format(
+                            "%02d:00",
+                            horaInicioManutencao
+                        )
+                    } - ${if(dataFimManutencao != null) dataFimManutencao else "(__/__)"} ${String.format("%02d:00", hora)}"
+            }
+
+
+            notifyDataSetChanged()
         }
     }
 

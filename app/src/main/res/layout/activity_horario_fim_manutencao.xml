@@ -5,9 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".ActivityHorarioFimManutencao"
     android:fitsSystemWindows="true"
-    tools:context=".ActivityAgendarHorario">
-
+    >
 
     <!-- Inicio cabecalho -->
     <LinearLayout
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/arvo_bold"
-                android:text="Agendar Horário"
+                android:text="Horário fim"
                 android:textColor="@color/verde_ascija"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayoutEndHeader"

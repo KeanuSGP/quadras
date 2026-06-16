@@ -2,8 +2,6 @@ package com.example.quadras
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,14 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZonedDateTime
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
-class agendarHorario : AppCompatActivity() {
+class ActivityAgendarHorario : AppCompatActivity() {
 
     private val repository = ReservationRepository()
     private lateinit var horarioAdapter: HorariosAdapter
@@ -39,6 +34,7 @@ class agendarHorario : AppCompatActivity() {
         voltar.setOnClickListener { finish() }
 
         // Recupera a quadra selecionada vinda do Adapter anterior
+        @Suppress("DEPRECATION")
         val quadra = intent.getSerializableExtra("quadra") as? Quadra
         if (quadra == null) {
             Toast.makeText(this, "Erro ao carregar dados da quadra", Toast.LENGTH_SHORT).show()
@@ -53,6 +49,8 @@ class agendarHorario : AppCompatActivity() {
         val btnConfirmar = findViewById<Button>(R.id.btnConfirmar)
         val calendario = findViewById<ImageView>(R.id.calendario)
         val txtData = findViewById<TextView>(R.id.txtDataSelecionada)
+        val header = findViewById<TextView>(R.id.textView)
+
 
         val logoff = findViewById<ImageView>(R.id.imageViewHomeIcon)
 
@@ -62,9 +60,12 @@ class agendarHorario : AppCompatActivity() {
         var dataSelecionada = formatarData.format(Date())
         txtData.text = dataSelecionada
 
+        // vê se o usuário logado é admin
+        val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
+
         // Inicializa o Adapter
         val quantidadeHorarios = 18
-        horarioAdapter = HorariosAdapter(quantidadeHorarios, this, resumo)
+        horarioAdapter = HorariosAdapter(quantidadeHorarios, this, resumo, ehAdmin, "inicio")
         rvHorario.layoutManager = object : GridLayoutManager(this, 3) {
             override fun canScrollVertically(): Boolean = false
         }
@@ -92,17 +93,25 @@ class agendarHorario : AppCompatActivity() {
             buscarReservasDoDia(dataSelecionada)
         }
 
-        // vê se o usuário logado é admin
-        val ehAdmin = intent.getBooleanExtra("ehAdmin", false)
+        if (ehAdmin) {
+            header.text = "Horário início"
+        }
 
         // Ação do Botão Confirmar
         btnConfirmar.setOnClickListener {
             val inc = horarioAdapter.primeiroClique
             val fim = horarioAdapter.segundoClique
 
-            if (inc == null || fim == null) {
-                Toast.makeText(this, "Selecione um horário válido (Início e Fim)!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            if (!ehAdmin) {
+                if (inc == null || fim == null) {
+                    Toast.makeText(this, "Selecione um horário válido (Início e Fim)!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            } else {
+                if (inc == null) {
+                    Toast.makeText(this, "Selecione um horário válido (Início)!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
             }
 
             // 1. Monta as datas no formato ISO correto antes de criar o objeto
@@ -120,7 +129,7 @@ class agendarHorario : AppCompatActivity() {
             )
 
             if (ehAdmin) {
-                val intent = Intent(this, ActivityTipoInterdicao::class.java)
+                val intent = Intent(this, ActivityHorarioFimManutencao::class.java)
                 intent.putExtra("objeto_reserva",objetoReserva)
                 intent.putExtra("nome_quadra",quadra.nome)
                 intent.putExtra("ehAdmin", ehAdmin)
@@ -138,7 +147,7 @@ class agendarHorario : AppCompatActivity() {
 
     private fun buscarReservasDoDia(data: String) {
         lifecycleScope.launch {
-            Toast.makeText(this@agendarHorario, "Buscando horários disponíveis...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@ActivityAgendarHorario, "Buscando horários disponíveis...", Toast.LENGTH_SHORT).show()
             val reservasOcupadas = repository.obterReservasQuardaNoDia(idQuadra, data)
 
             // Alimenta o adapter com as reservas reais vindas do banco

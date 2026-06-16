@@ -14,10 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Quadras_Android">
         <activity
-            android:name=".ActivityConfirmarReserva"
+            android:name=".ActivityHorarioFimManutencao"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityConfirmarReserva"
             android:exported="false" />
         <activity
             android:name=".ActivityReservas"
@@ -50,7 +50,7 @@
             android:name=".ActivityTipoInterdicao"
             android:exported="false" />
         <activity
-            android:name=".agendarHorario"
+            android:name=".ActivityAgendarHorario"
             android:exported="false" />
         <activity
             android:name=".ActivityLogin"

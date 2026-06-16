@@ -29,7 +29,8 @@ class ReservasAdapter(
     private val diaAtual: String,
     private val horaFormatada: String,
     private val avisoReserva: TextView? = null,
-    private val context: Context? = null
+    private val context: Context? = null,
+    private val adminUser: Boolean = false
 ) : RecyclerView.Adapter<ReservasAdapter.ViewHolder>() {
 
     private val repository = ReservationRepository()
@@ -55,24 +56,40 @@ class ReservasAdapter(
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val reserva: Reserva = reservas[position]
         // pega a data
-        val data = LocalDate.parse(reserva.horaInicio.split("T")[0])
+        val dataInicio = LocalDate.parse(reserva.horaInicio.split("T")[0])
+        val dataFim = LocalDate.parse(reserva.horaFim.split("T")[0])
         // pega o dia
-        val dia = data.toString().split('-')[2]
+        val diaInicio = dataInicio.toString().split('-')[2]
+        val diaFim = dataFim.toString().split('-')[2]
         // pega o mês e converte para o nome dele em enum e em inglês
-        val mes = Month.of(data.toString().split('-')[1].toInt())
+        val mesInicio = Month.of(dataInicio.toString().split('-')[1].toInt())
+        val mesFim = Month.of(dataFim.toString().split('-')[1].toInt())
+
         val quadra = quadras.find { it.id == reserva.idQuadra }
 
         // getDisplayName ta formantando para string. FULL indica que vai exibir o nome completo do mês e
         // locale está setando o idioma para o brasileiro
-        @Suppress("DEPRECATION")
-        val dataTxt = "${dia} de ${mes.getDisplayName(TextStyle.FULL, Locale("pt", "BR"))} \n" +
-                "${reserva.horaInicio.split("T")[1].split(":")[0]}h" +
-                " - ${reserva.horaFim.split("T")[1].split(":")[0]}h"
+
+        if (adminUser) {
+            @Suppress("DEPRECATION")
+            val dataTxt = "${diaInicio} de ${mesInicio.getDisplayName(TextStyle.FULL, Locale("pt", "BR"))} " +
+                    "- ${diaFim} de ${mesFim.getDisplayName(TextStyle.FULL, Locale("pt", "BR"))} \n" +
+                    "${reserva.horaInicio.split("T")[1].split(":")[0]}h" +
+                    " - ${reserva.horaFim.split("T")[1].split(":")[0]}h"
 
 
-        viewHolder.nome.text = quadra?.nome
-        viewHolder.data.text = dataTxt
+            viewHolder.nome.text = quadra?.nome
+            viewHolder.data.text = dataTxt
+        } else {
+            @Suppress("DEPRECATION")
+            val dataTxt = "${diaInicio} de ${mesInicio.getDisplayName(TextStyle.FULL, Locale("pt", "BR"))} \n" +
+                    "${reserva.horaInicio.split("T")[1].split(":")[0]}h" +
+                    " - ${reserva.horaFim.split("T")[1].split(":")[0]}h"
 
+
+            viewHolder.nome.text = quadra?.nome
+            viewHolder.data.text = dataTxt
+        }
         viewHolder.cancelar.setOnClickListener {
             deletarReserva(reserva)
         }

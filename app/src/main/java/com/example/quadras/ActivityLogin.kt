@@ -12,6 +12,7 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ActivityLogin : AppCompatActivity() {
-
     // Apenas instanciamos a nossa classe de testes isolada
     private val tester = SupabaseTest()
     private val repository = ReservationRepository()
@@ -28,6 +28,10 @@ class ActivityLogin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // força o aplicativo a só usar tema claro
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        AppCompatDelegate.setApplicationLocales(
+            LocaleListCompat.forLanguageTags("pt-BR")
+        )
+
         setContentView(R.layout.activity_login_morador)
 
         //components
